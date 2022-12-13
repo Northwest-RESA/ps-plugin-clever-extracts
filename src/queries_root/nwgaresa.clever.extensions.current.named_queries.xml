@@ -33,7 +33,6 @@
 					, t.lastday
 					, t.firstday
 				from terms t 
-					join current_yearids c on t.id between c.yearid_low and c.yearid_high
 					join prefs 
 						on t.id between to_number(to_char(prefs.value) || '00') and to_number(to_char(prefs.value) || '99')
 						and lower(prefs.name) = 'coursearchiveyear'
@@ -114,13 +113,13 @@
 				, case when sec504.studentsdcid is not null then 'Section 504' end section_504
 				, case when sped.studentsdcid is not null then 'Special Education (SPED)' end special_education
 				, case when gifted.studentsdcid is not null then 'Talented and Gifted (TAG)' end talented_gifted
-				, case when upper(cur_stu.lunchstatus) in ('F', 'R') then 'Free and Reduced Lunch (FRL)' end frl
+				, case when upper(curstu.lunchstatus) in ('F', 'R') then 'Free and Reduced Lunch (FRL)' end frl
 				, case when esol.studentsdcid is not null then 'English Language Learner (ELL)' end ell
 			from (select * from curstu) curstu
-			    left join (select * from gifted) gifted on cur_stu.dcid = gifted.studentsdcid
-				left join (select * from esol) esol on cur_stu.dcid = esol.studentsdcid
-				left join (select * from sped) sped on cur_stu.dcid = sped.studentsdcid
-				left join (select * from sec504) sec504 on cur_stu.dcid = sec504.studentsdcid
+		    	left join (select * from gifted) gifted on curstu.dcid = gifted.studentsdcid
+				left join (select * from esol) esol on curstu.dcid = esol.studentsdcid
+				left join (select * from sped) sped on curstu.dcid = sped.studentsdcid
+				left join (select * from sec504) sec504 on curstu.dcid = sec504.studentsdcid
 			order by curstu.dcid
 
 		]]>
