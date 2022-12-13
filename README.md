@@ -47,3 +47,6 @@ or Cmd+Shift+P then type Run Build Task
 
 ## 0.3.1
 - Updates permissions to match
+
+## 0.3.2
+- Fixes permissions on one table

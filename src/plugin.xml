@@ -14,7 +14,7 @@
         <field table="PREFS" field="NAME" access="ViewOnly" />
 
         <field table="S_GA_STU_ESOL_C" field="STUDENTSDCID" access="ViewOnly" />
-        <field table="S_GA_STU_GIFTED_C" field="EXITDATE" access="ViewOnly" />
+        <field table="S_GA_STU_GIFTED_C" field="STUDENTSDCID" access="ViewOnly" />
         <field table="S_GA_STU_SPECED_X" field="STUDENTSDCID" access="ViewOnly" />
         <field table="S_GA_STU_504_C" field="STUDENTSDCID" access="ViewOnly" />
 
