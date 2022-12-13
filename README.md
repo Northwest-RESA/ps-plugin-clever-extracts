@@ -50,3 +50,6 @@ or Cmd+Shift+P then type Run Build Task
 
 ## 0.3.2
 - Fixes permissions on one table
+
+## 0.3.3
+- Fixes errors in the query
