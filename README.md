@@ -44,3 +44,6 @@ or Cmd+Shift+P then type Run Build Task
 
 ## 0.3.0
 - Passes validation checks when installed (data extracts need to be verified)
+
+## 0.3.1
+- Updates permissions to match
