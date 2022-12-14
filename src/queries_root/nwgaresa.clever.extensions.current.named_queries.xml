@@ -47,18 +47,19 @@
 					, stu.lastfirst
 					, stu.entrydate, stu.exitdate
 					, stu.grade_level
+					, stu.ENROLL_STATUS 
 					, stu.schoolid
 					, stu.lunchstatus
 					, stu.state_excludefromreporting
 				from students stu
-					join (select * from curyear) cy on stu.entrydate between cy.firstday and cy.lastday
+					join (select * from curyear) cy on stu.entrydate between cy.firstday - 14 and cy.lastday + 14
 			)
 
 			, gifted as (
 				-- students that are currenty gifted
 				select distinct g.studentsdcid   
 				from s_ga_stu_gifted_c g
-					join (select * from curyear) cy on coalesce(g.exitdate, sysdate) between cy.firstday and cy.lastday
+					join (select * from curyear) cy on coalesce(g.exitdate, sysdate) >= cy.firstday - 14
 				where 1=1
 					and g.giftedprogram = 1 -- Enrolled
 					and g.servicecode = 1 -- Served this year 2 = not served this year
@@ -66,11 +67,11 @@
 
 			, esol as (
 				-- students that are currently el
-				select distinct el.studentsdcid 
+				select DISTINCT el.studentsdcid 
 				from s_ga_stu_esol_c el
-					join (select * from curyear) cy on coalesce(el.exitdate, sysdate) between cy.firstday and cy.lastday
+					join (select * from curyear) cy on coalesce(el.exitdate, sysdate) >= cy.firstday - 14
 				where 1=1
-					and el.isesol = 1
+					--and el.isesol = 1 -- being served currently
 					and upper(el.elflag) = 'Y' -- Y, F, M, [null]
 			)
 
@@ -78,7 +79,7 @@
 				-- use s_ga_ren_speced_x for historical data (not needed for this query since we are assuming current year)
 				select distinct sped.studentsdcid
 				from s_ga_stu_speced_x sped
-					join (select * from curyear) cy on coalesce(sped.exitdate, sysdate) between cy.firstday and cy.lastday
+					join (select * from curyear) cy on coalesce(sped.exitdate, sysdate) between cy.firstday - 14 and cy.lastday + 14
 				where 1=1
 					and upper(sped.all_iep) = 'Y'  -- excluding Service plan only students
 			)
@@ -87,7 +88,7 @@
 				-- students marked 504 during the current year
 				select distinct s504.studentsdcid 
 				from s_ga_stu_504_c s504
-					join (select * from curyear) cy on coalesce(s504.enrollmentdate, sysdate) between cy.firstday and cy.lastday
+					join (select * from curyear) cy on coalesce(s504.exitdate, sysdate) BETWEEN cy.firstday - 14 AND cy.lastday + 14
 				where 1=1
 					and s504.is504 = 1
 			)
@@ -113,7 +114,7 @@
 				, case when sec504.studentsdcid is not null then 'Section 504' end section_504
 				, case when sped.studentsdcid is not null then 'Special Education (SPED)' end special_education
 				, case when gifted.studentsdcid is not null then 'Talented and Gifted (TAG)' end talented_gifted
-				, case when upper(curstu.lunchstatus) in ('F', 'R') then 'Free and Reduced Lunch (FRL)' end frl
+				, case when upper(curstu.lunchstatus) in ('R', 'F') then 'Free and Reduced Lunch (FRL)' end frl
 				, case when esol.studentsdcid is not null then 'English Language Learner (ELL)' end ell
 			from (select * from curstu) curstu
 		    	left join (select * from gifted) gifted on curstu.dcid = gifted.studentsdcid

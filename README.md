@@ -36,6 +36,15 @@ or Cmd+Shift+P then type Run Build Task
 
 # Version History
 
+## 0.3.6
+- Removed final cte
+
+## 0.3.5
+- Removed enroll_status from results
+
+## 0.3.4
+- First and last day adjustments
+
 ## 0.3.3
 - Fixes errors in the query
 
