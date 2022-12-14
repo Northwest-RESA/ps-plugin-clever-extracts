@@ -36,20 +36,24 @@ or Cmd+Shift+P then type Run Build Task
 
 # Version History
 
-## 0.1.0
-- First version of the plugin
-
-## 0.1.12
-- First version to pass install checks in PS (maybe not)
-
-## 0.3.0
-- Passes validation checks when installed (data extracts need to be verified)
-
-## 0.3.1
-- Updates permissions to match
+## 0.3.3
+- Fixes errors in the query
 
 ## 0.3.2
 - Fixes permissions on one table
 
-## 0.3.3
-- Fixes errors in the query
+## 0.3.1
+- Updates permissions to match
+
+## 0.3.0
+- Passes validation checks when installed (data extracts need to be verified)
+
+## 0.1.0
+- First version of the plugin
+
+
+
+
+
+
+
