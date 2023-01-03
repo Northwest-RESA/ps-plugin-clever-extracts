@@ -114,13 +114,20 @@
 				, case when sec504.studentsdcid is not null then 'Section 504' end section_504
 				, case when sped.studentsdcid is not null then 'Special Education (SPED)' end special_education
 				, case when gifted.studentsdcid is not null then 'Talented and Gifted (TAG)' end talented_gifted
-				, case when upper(curstu.lunchstatus) in ('R', 'F') then 'Free and Reduced Lunch (FRL)' end frl
+				, case when upper(curstu.lunchstatus) in ('R', 'F') then 'Free and Reduced Lunch (FRL)' end frl  -- change constraint too
 				, case when esol.studentsdcid is not null then 'English Language Learner (ELL)' end ell
 			from (select * from curstu) curstu
 		    	left join (select * from gifted) gifted on curstu.dcid = gifted.studentsdcid
 				left join (select * from esol) esol on curstu.dcid = esol.studentsdcid
 				left join (select * from sped) sped on curstu.dcid = sped.studentsdcid
 				left join (select * from sec504) sec504 on curstu.dcid = sec504.studentsdcid
+			where 1=1 
+				and (sec504.studentsdcid is not null
+					or sped.studentsdcid is not null
+					or gifted.studentsdcid is not null
+					or esol.studentsdcid is not null
+					or upper(curstu.lunchstatus) in ('R', 'F')
+				)
 			order by curstu.dcid
 
 		]]>

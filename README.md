@@ -36,6 +36,9 @@ or Cmd+Shift+P then type Run Build Task
 
 # Version History
 
+## 0.3.7
+- Removes rows with no extended field values
+
 ## 0.3.6
 - Removed final cte
 
