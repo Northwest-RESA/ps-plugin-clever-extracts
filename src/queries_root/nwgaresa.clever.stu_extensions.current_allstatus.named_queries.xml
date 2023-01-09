@@ -1,7 +1,7 @@
 <queries>
 
-	<query name="nwgaresa.clever.extensions.current" flattened="true">
-	<description>Program extensions file for Clever.</description>
+	<query name="nwgaresa.clever.stu_extensions.current_allstatus" flattened="true">
+	<description>Program extensions file for Clever. Returns all students that were enrolled the current school year no matter their current status. This query pulls withdrawn students.</description>
 	<columns>
 		<column column="STUDENTS.DCID">dcid</column>
 		<column column="STUDENTS.ID">id</column>
@@ -121,8 +121,8 @@
 				left join (select * from esol) esol on curstu.dcid = esol.studentsdcid
 				left join (select * from sped) sped on curstu.dcid = sped.studentsdcid
 				left join (select * from sec504) sec504 on curstu.dcid = sec504.studentsdcid
-			where 1=1 
 				and (sec504.studentsdcid is not null
+			where 1=1 
 					or sped.studentsdcid is not null
 					or gifted.studentsdcid is not null
 					or esol.studentsdcid is not null
