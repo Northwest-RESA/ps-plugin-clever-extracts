@@ -36,6 +36,9 @@ or Cmd+Shift+P then type Run Build Task
 
 # Version History
 
+## 0.4.1
+- Fixed broken Query
+
 ## 0.4.0
 - Changed current to only pull enrolled or preregistered students
 - Added current_allstatus to pull all students enrolled no matter their current status.

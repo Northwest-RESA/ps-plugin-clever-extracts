@@ -3,7 +3,7 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation='http://plugin.powerschool.pearson.com plugin.xsd'
     name="Northwest RESA - Clever Data Exports"
-    version="0.4.0"
+    version="0.4.1"
     description="PowerSchool plugin developed by Northwest GA RESA to allow districts to use Power Queries to submit files to Clever via SFTP.">
 
     <oauth></oauth>
