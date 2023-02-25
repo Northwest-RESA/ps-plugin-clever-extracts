@@ -1,0 +1,534 @@
+<queries>
+	<query name="nwgaresa.clever.sections.all" coreTable="SECTIONS" flattened="true" tags="nwgaresa,clever,sections,all">
+	<description>
+        <![CDATA[
+            <script type="text/javascript">
+                // columns can only be used once on the export
+                const table = "sections";
+                const colList = [
+                    {field:"school_id",label:"school_id"},
+                    {field:"section_id",label:"section_id"},
+                    {field:"teacher_id",label:"teacher_id"},
+                    {field:"teacher_2_id",label:"teacher_2_id"},
+                    {field:"teacher_3_id",label:"teacher_3_id"},
+                    {field:"teacher_4_id",label:"teacher_4_id"},
+                    {field:"teacher_5_id",label:"teacher_5_id"},
+                    {field:"teacher_6_id",label:"teacher_6_id"},
+                    {field:"teacher_7_id",label:"teacher_7_id"},
+                    {field:"teacher_8_id",label:"teacher_8_id"},
+                    {field:"teacher_9_id",label:"teacher_9_id"},
+                    {field:"teacher_10_id",label:"teacher_10_id"},
+                    {field:"section_name",label:"name"},
+                    {field:"section_number",label:"section_number"},
+                    {field:"course_name",label:"course_name"},
+                    {field:"course_number",label:"course_number"},
+                    {field:"course_description",label:"course_description"},
+                    {field:"external_expression",label:"period"},
+                    {field:"subject",label:"subject"},
+                    {field:"term_name",label:"term_name"},
+                    {field:"term_start",label:"term_start"},
+                    {field:"term_end",label:"term_end"}
+                ];
+                function selectDefaultColumns() {
+                    
+                    // force all of the available fields to be displayed
+                    var btn_expall = document.querySelector("button[id=idExpandAll]");
+                    if (btn_expall) { 
+                        btn_expall.click();
+                    } else {
+                        var btn_expTbl = document.querySelector("button[id=" + table + "_expandBtn]")
+                        if (btn_expTbl) {
+                            if (window.getComputedStyle(btn_expTbl).display !== 'none') {
+                                btn_expTbl.click();
+                            }
+                        }
+                    }
+
+                    colList.forEach(col => {
+                        cb = document.querySelector("td[id=columnListContainer] [id^=cb_][id$=" + table + "_" + col.field + "]");
+                        // have to check to see if the item was already selected. If it was... we should skip it
+                        if (cb) {
+                            if (cb.checked) { }
+                        }
+                        cb.click();
+                        if (cb.checked) {
+                            // look for the field in the selected columns and set the label.
+                            document.querySelector("td[id=columnSelectionContainer] input[type=text][id^=label_cb_][id$=" + col.field + "]").value = col.label;
+                        }
+                    });
+                }
+                function removeAllFields() {
+                    document.querySelectorAll("td[id=columnSelectionContainer] input[type=text][id^=label_cb_]").forEach(lbl => {
+                        document.querySelector("td[id=columnSelectionContainer] button[id=" + lbl.id.replace('label', 'delete') + "]").click();
+                    });
+                }
+            </script>
+            <h2 id="specHeader" class="toggle collapsed">Clever sections.csv Specification</h2>
+            <div class="hide">
+                <div class="rounded-box">
+                <ul>
+                    <li>Section export data for Clever.</li>
+                    <li>Returns all section records that have at least one student enrolled for the current school year.</li>
+                    <li>Optional fields can be left blank or excluded from the export.</li>
+                </ul>
+                </div>
+                <table align="center" border="0" cellpadding="4" cellspacing="0" class="grid">
+                    <thead>
+                        <tr>
+                            <th>Column Header *</th>
+                            <th>Required</th>
+                            <th>Format</th>
+                            <th>Notes</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="bold">school_id</td>
+                            <td class="bold">YES</td>
+                            <td>String</td>
+                            <td>Corresponds to &#39;school_id&#39; field in uploaded in the schools file.</td>
+                        </tr>
+                        <tr>
+                            <td class="bold">section_id</td>
+                            <td class="bold">YES</td>
+                            <td>String</td>
+                            <td>Unique and constant id for the section, to be used in the enrollments.csv upload. Corresponds to the &#39;sis_id&#39; field in Clever. Unique across the district.</td>
+                        </tr>
+                        <tr>
+                            <td class="bold">teacher_id</td>
+                            <td class="bold">YES</td>
+                            <td>String</td>
+                            <td>Unique id for the primary teacher, must match the &#39;sis_id&#39; field in Clever for the teacher.csv file.</td>
+                        </tr>
+                        <tr>
+                            <td class="">teacher_2_id</td>
+                            <td class="">NO</td>
+                            <td>String</td>
+                            <td>Unique id for the supplementary co-teacher, must match the &#39;sis_id&#39; field in Clever for the teacher.csv file.</td>
+                        </tr>
+                        <tr>
+                            <td class="">teacher_3_id</td>
+                            <td class="">NO</td>
+                            <td>String</td>
+                            <td>Unique id for the supplementary co-teacher, must match the &#39;sis_id&#39; field in Clever for the teacher.csv file.</td>
+                        </tr>
+                        <tr>
+                            <td class="">teacher_4_id</td>
+                            <td class="">NO</td>
+                            <td>String</td>
+                            <td>Unique id for the supplementary co-teacher, must match the &#39;sis_id&#39; field in Clever for the teacher.csv file.</td>
+                        </tr>
+                        <tr>
+                            <td class="">teacher_5_id</td>
+                            <td class="">NO</td>
+                            <td>String</td>
+                            <td>Unique id for the supplementary co-teacher, must match the &#39;sis_id&#39; field in Clever for the teacher.csv file.</td>
+                        </tr>
+                        <tr>
+                            <td class="">teacher_6_id</td>
+                            <td class="">NO</td>
+                            <td>String</td>
+                            <td>Unique id for the supplementary co-teacher, must match the &#39;sis_id&#39; field in Clever for the teacher.csv file.</td>
+                        </tr>
+                        <tr>
+                            <td class="">teacher_7_id</td>
+                            <td class="">NO</td>
+                            <td>String</td>
+                            <td>Unique id for the supplementary co-teacher, must match the &#39;sis_id&#39; field in Clever for the teacher.csv file.</td>
+                        </tr>
+                        <tr>
+                            <td class="">teacher_8_id</td>
+                            <td class="">NO</td>
+                            <td>String</td>
+                            <td>Unique id for the supplementary co-teacher, must match the &#39;sis_id&#39; field in Clever for the teacher.csv file.</td>
+                        </tr>
+                        <tr>
+                            <td class="">teacher_9_id</td>
+                            <td class="">NO</td>
+                            <td>String</td>
+                            <td>Unique id for the supplementary co-teacher, must match the &#39;sis_id&#39; field in Clever for the teacher.csv file.</td>
+                        </tr>
+                        <tr>
+                            <td class="">teacher_10_id</td>
+                            <td class="">NO</td>
+                            <td>String</td>
+                            <td>Unique id for the supplementary co-teacher, must match the &#39;sis_id&#39; field in Clever for the teacher.csv file.</td>
+                        </tr>
+                        <tr>
+                            <td class="">name</td>
+                            <td class="">NO</td>
+                            <td>String</td>
+                            <td>Unique name for the section and time offered, e.g. &quot;Algebra - 101 - Period 1A&quot;. Clever will create a name in the format of <i>course_name - teacher_last_name - period</i>, if not provided.</td>
+                        </tr>
+                        <tr>
+                            <td>section_number</td>
+                            <td>NO</td>
+                            <td>String</td>
+                            <td>Section identifier, set by school or district.</td>
+                        </tr>
+                        <tr>
+                            <td>grade</td>
+                            <td>NO</td>
+                            <td>Option</td>
+                            <td>Integers for grades 1-12, &#39;Kindergarten&#39;, &#39;Prekindergarten&#39;, &#39;Postgraduate&#39;.</td>
+                        </tr>
+                        <tr>
+                            <td class="bold">course_name</td>
+                            <td class="bold">YES</td>
+                            <td>String</td>
+                            <td>Name fo the course associated with the section (e.g. Algebra). Will be used to create section names.</td>
+                        </tr>
+                        <tr>
+                            <td class="">course_number</td>
+                            <td class="">NO</td>
+                            <td>String</td>
+                            <td>Identifier for the course associated with the section.</td>
+                        </tr>
+                        <tr>
+                            <td class="">course_description</td>
+                            <td class="">NO</td>
+                            <td>String</td>
+                            <td>A description of the course associated with the section.</td>
+                        </tr>
+                        <tr>
+                            <td class="">period</td>
+                            <td class="">NO</td>
+                            <td>String</td>
+                            <td>Bell schedule information for section. Used to create section names.</td>
+                        </tr>
+                        <tr>
+                            <td class="">subject</td>
+                            <td class="">NO</td>
+                            <td>Option</td>
+                            <td>Supported value: 
+                                <ul>
+                                    <li>English/language arts</li>
+                                    <li>Math</li>
+                                    <li>Science</li>
+                                    <li>Social studies</li>
+                                    <li>Language</li>
+                                    <li>Homeroom/advisory</li>
+                                    <li>Interventions/online learning</li>
+                                    <li>Technology and engineering</li>
+                                    <li>PE and health</li>
+                                    <li>Arts and music</li>
+                                    <li>other</li>
+                                </ul>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="">term_name</td>
+                            <td class="">NO</td>
+                            <td>String</td>
+                            <td>The name of the associated term (e.g. Year, S1, Q3).</td>
+                        </tr>
+                        <tr>
+                            <td class="">term_start</td>
+                            <td class="">NO</td>
+                            <td>Date</td>
+                            <td>First day of the term. Use format : <i>MM/DD/YYYY</i>.</td>
+                        </tr>
+                        <tr>
+                            <td class="">term_end</td>
+                            <td class="">NO</td>
+                            <td>Date</td>
+                            <td>Last day of the term. Use format : <i>MM/DD/YYYY</i>.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            * Header rows must be labeled as listed in the table above. <b>Remove the table name and period from the label.</b> i.e. <i>SCHOOLS.</i>school_id
+            <div class="button-row">
+                <button type="button" onclick="selectDefaultColumns(); return false;">Toggle Default Columns</button>
+                <button type="button" onclick="removeAllFields(); return false;">Remove All Fields</button>
+            </div>
+        ]]>
+    </description>
+	<columns>
+        <column column="SCHOOLS.SCHOOL_NUMBER" description="The school number where the section is scheduled.">school_id</column>
+        <column column="ID" description="The ID field from the sections table.">section_id</column>
+        <column column="USERS.TEACHERNUMBER" description="The teachernumber field from the users table.">teacher_id</column>
+        <column column="USERS.TEACHERNUMBER" description="The teachernumber field from the users table.">teacher_2_id</column>
+        <column column="USERS.TEACHERNUMBER" description="The teachernumber field from the users table.">teacher_3_id</column>
+        <column column="USERS.TEACHERNUMBER" description="The teachernumber field from the users table.">teacher_4_id</column>
+        <column column="USERS.TEACHERNUMBER" description="The teachernumber field from the users table.">teacher_5_id</column>
+        <column column="USERS.TEACHERNUMBER" description="The teachernumber field from the users table.">teacher_6_id</column>
+        <column column="USERS.TEACHERNUMBER" description="The teachernumber field from the users table.">teacher_7_id</column>
+        <column column="USERS.TEACHERNUMBER" description="The teachernumber field from the users table.">teacher_8_id</column>
+        <column column="USERS.TEACHERNUMBER" description="The teachernumber field from the users table.">teacher_9_id</column>
+        <column column="USERS.TEACHERNUMBER" description="The teachernumber field from the users table.">teacher_10_id</column>
+        <column column="COURSE_NUMBER" description="Compiled name for the section.">section_name</column>
+        <column column="SECTION_NUMBER" description="Number assigned to the section.">section_number</column>
+        <column column="GRADE_LEVEL" description="blank value">grade</column>
+        <column column="COURSES.COURSE_NAME" description="">course_name</column>
+        <column column="COURSE_NUMBER" description="">course_number</column>
+        <column column="COURSES.COURSE_NAME" description="Currently providing the description of the subject.">course_description</column>
+        <column column="EXTERNAL_EXPRESSION" description="">external_expression</column>
+        <column column="COURSES.COURSE_NAME" description="">subject</column>
+        <column column="TERMS.ABBREVIATION" description="">term_name</column>
+        <column column="TERMS.FIRSTDAY" description="">term_start</column>
+        <column column="TERMS.LASTDAY" description="">term_end</column>
+ 
+        <!-- <column column="TRANSACTION_DATE" description="Date and time of the last edit performed on the section record.">date_last_modified</column> -->
+	</columns>
+	<sql>
+        <![CDATA[
+            with curyear as (
+                select t.id
+                    , t.yearid
+                    , t.lastday
+                    , t.firstday
+                    , t.abbreviation
+                    , t.name
+                from terms t
+                    join prefs 
+                        on t.id between to_number(to_char(prefs.value) || '00') and to_number(to_char(prefs.value) || '99')
+                        and lower(prefs.name) = 'coursearchiveyear'
+                where 1=1
+                    and t.schoolid = 0 
+                    and t.isyearrec = 1
+            )
+            , sch as (
+                select 
+                    sch.school_number as schoolid
+                from schools sch
+                where 1=1 
+                    and sch.school_number <> 999999
+            )
+            , crs_dis as (
+                select '00' as code, 'Homeroom/advisory' as clever_subject, 'Local Course' as description from dual union all
+                select '17' as code, 'PE and health' as clever_subject, 'HEALTH' as description from dual union all
+                select '23' as code, 'English/Language Arts' as clever_subject, 'ENGLISH LANGUAGE ARTS' as description from dual union all
+                select '26' as code, 'Science' as clever_subject, 'LIFE SCIENCES' as description from dual union all
+                select '40' as code, 'Science' as clever_subject, 'PHYSICAL SCIENCES' as description from dual union all
+                select '27' as code, 'Math' as clever_subject, 'MATHEMATICS' as description from dual union all
+                select '35' as code, 'other' as clever_subject, 'PERSONAL, INTERPERSONAL, SOCIAL SKILLS, OTHER' as description from dual union all
+                select '36' as code, 'PE and health' as clever_subject, 'PHYSICAL EDUCATION' as description from dual union all
+                select '45' as code, 'Social studies' as clever_subject, 'SOCIAL SCIENCES' as description from dual union all
+                select '50' as code, 'Arts and music' as clever_subject, 'VISUAL ARTS' as description from dual union all
+                select '51' as code, 'Arts and music' as clever_subject, 'DANCE' as description from dual union all
+                select '52' as code, 'Arts and music' as clever_subject, 'THEATRE ARTS' as description from dual union all
+                select '53' as code, 'Arts and music' as clever_subject, 'MUSIC' as description from dual union all
+                select '54' as code, 'Arts and music' as clever_subject, 'CHORUS' as description from dual union all
+                select '55' as code, 'Language' as clever_subject, 'ENGLISH TO SPEAKERS OF OTHER LANGUAGES (ESOL)' as description from dual union all
+                select '60' as code, 'Language' as clever_subject, 'ROMANCE LANGUAGES' as description from dual union all
+                select '61' as code, 'Language' as clever_subject, 'GERMANIC, SLAVIC AND CLASSICAL LANGUAGES' as description from dual union all
+                select '62' as code, 'Language' as clever_subject, 'ASIAN LANGUAGES' as description from dual union all
+                select '63' as code, 'Language' as clever_subject, 'AFRICAN AND SEMITIC LANGUAGES' as description from dual union all
+                select '64' as code, 'Language' as clever_subject, 'AMERICAN SIGN LANGUAGE' as description from dual union all
+                select '65' as code, 'Language' as clever_subject, 'OTHER NATIVE SPEAKERS LANGUAGES' as description from dual union all
+                select '66' as code, 'Language' as clever_subject, 'COMMONLY TAUGHT LANGUAGES' as description from dual union all
+                select '67' as code, 'Language' as clever_subject, 'DUAL LANGUAGE IMMERSION' as description from dual union all
+                select '70' as code, 'other' as clever_subject, 'PROFESSIONAL/CAREER PREPARATION (GRADES 9-12)' as description from dual union all
+                select '71' as code, 'other' as clever_subject, 'GIFTED EDUCATION RESOURCE CLASSES' as description from dual union all
+                select '80' as code, 'Science' as clever_subject, 'LIBRARY SCIENCE' as description from dual union all
+                select '01' as code, 'Technology and engineering' as clever_subject, 'CTAE : AGRICULTURAL BUSINESS AND PRODUCTION TECHNOLOGY' as description from dual union all
+                select '02' as code, 'Technology and engineering' as clever_subject, 'CTAE : AGRICULTURE SCIENCE AND TECHNOLOGY' as description from dual union all
+                select '03' as code, 'Technology and engineering' as clever_subject, 'CTAE : CONSERVATION AND RENEWABLE NATURAL RESOURCES' as description from dual union all
+                select '06' as code, 'Technology and engineering' as clever_subject, 'CTAE : BUSINESS, MARKETING, AND INFORMATION MANAGEMENT (GRADES 6-12)' as description from dual union all
+                select '07' as code, 'Technology and engineering' as clever_subject, 'CTAE : BUSINESS, MARKETING, AND INFORMATION MANAGEMENT (GRADES 6-12)' as description from dual union all
+                select '08' as code, 'Technology and engineering' as clever_subject, 'CTAE : BUSINESS, MARKETING, AND INFORMATION MANAGEMENT (GRADES 6-12)' as description from dual union all
+                select '10' as code, 'Technology and engineering' as clever_subject, 'CTAE : COMMUNICATION TECHNOLOGIES' as description from dual union all
+                -- 11 can be non - CTAE for certain course numbers. This could be taken into account for other purposes
+                select '11' as code, 'Technology and engineering' as clever_subject, 'CTAE : INFORMATION TECHNOLOGY' as description from dual union all
+                select '12' as code, 'Technology and engineering' as clever_subject, 'CTAE : HUMAN SERVICES' as description from dual union all
+                select '13' as code, 'Technology and engineering' as clever_subject, 'CTAE : EDUCATION, TEACHER GENERAL (GRADES 9-12)' as description from dual union all
+                select '20' as code, 'Technology and engineering' as clever_subject, 'CTAE : FAMILY AND CONSUMER SCIENCES' as description from dual union all
+                select '21' as code, 'Technology and engineering' as clever_subject, 'CTAE : TECHNOLOGY EDUCATION' as description from dual union all
+                select '25' as code, 'Technology and engineering' as clever_subject, 'CTAE : HEALTH SCIENCES' as description from dual union all
+                select '28' as code, 'Technology and engineering' as clever_subject, 'CTAE : MILITARY SCIENCE (GRADES 9-12)' as description from dual union all
+                select '29' as code, 'Technology and engineering' as clever_subject, 'CTAE : GOVERNMENT AND PUBLIC ADMINISTRATION' as description from dual union all
+                select '32' as code, 'Technology and engineering' as clever_subject, 'CTAE : PROGRAM OF EDUCATION AND CAREER EXPLORATION/CAREER CONNECTION' as description from dual union all
+                select '43' as code, 'Technology and engineering' as clever_subject, 'CTAE : PUBLIC SAFETY' as description from dual union all
+                select '46' as code, 'Technology and engineering' as clever_subject, 'CTAE : CONSTRUCTION TECHNOLOGY' as description from dual union all
+                select '47' as code, 'Technology and engineering' as clever_subject, 'CTAE : MECHANICAL OCCUPATIONS: AUTOMOTIVE TECHNOLOGY' as description from dual union all
+                select '48' as code, 'Technology and engineering' as clever_subject, 'CTAE : PRECISION PRODUCTION OCCUPATIONS' as description from dual union all
+                select '49' as code, 'Technology and engineering' as clever_subject, 'CTAE : MANUFACTURING SCIENCES' as description from dual
+            ) 
+            , crs as (
+                select 
+                    c.dcid
+                    , c.id
+                    , c.course_number
+                    , c.course_name
+                    , c.excludefromstoredgrades
+                    , c.exclude_ada
+                    , c.excludefromgpa
+                    , c.excludefromclassrank
+                    , c.excludefromhonorroll
+                    , c.credittype
+                    , c.vocational
+                    , c.transaction_date
+                    , case 
+                        when length(c.course_number) = 9 and substr(c.course_number, 1, 2 ) <> '00'
+                            then substr(c.course_number, 1, 2) || '0' || substr(c.course_number, 3, 4) || '00'
+                        when length(c.course_number) = 9 and substr(c.course_number, 1, 2) = '00' then '000000000' 
+                        else 'Not a Valid State Course' 
+                    end  as state_course_number
+                    , coalesce(crs_dis.clever_subject, 'other') as course_discipline
+                    , crs_dis.description as course_discipline_desc
+                from courses c 
+                    inner join (select * from crs_dis) crs_dis on substr(c.course_number, 1, 2) = crs_dis.code
+                where 1=1
+            )
+            , tch as (
+                select 
+                    sch.schoolid
+                    , ss.id as schoolstaff_id
+                    , usr.teachernumber
+                    , usr.dcid as users_dcid
+                    , usr.lastfirst
+                    , usr.last_name
+                from schoolstaff ss
+                    inner join users usr on ss.users_dcid = usr.dcid
+                    inner join (select * from sch) sch on sch.schoolid = ss.schoolid 
+                where 1=1
+                    and ss.status = 1 -- Active Staff record
+            )
+            , sec as (
+            	select distinct
+            		s.schoolid
+            		, cast(s.id as varchar(40)) as sectionid
+            		, nth_value(tch.teachernumber, 1) over (
+                        partition by s.schoolid, s.termid, s.id, s.expression 
+                        order by st.roleid, st.start_date 
+                        range between unbounded preceding and unbounded following
+                    ) as teacher_id
+            		, nth_value(tch.teachernumber, 2) over (
+                        partition by s.schoolid, s.termid, s.id, s.expression 
+                        order by st.roleid, st.start_date 
+                        range between unbounded preceding and unbounded following
+                    ) as teacher_2_id
+            		, nth_value(tch.teachernumber, 3) over (
+                        partition by s.schoolid, s.termid, s.id, s.expression 
+                        order by st.roleid, st.start_date 
+                        range between unbounded preceding and unbounded following
+                    ) as teacher_3_id
+            		, nth_value(tch.teachernumber, 4) over (
+                        partition by s.schoolid, s.termid, s.id, s.expression 
+                        order by st.roleid, st.start_date 
+                        range between unbounded preceding and unbounded following
+                    ) as teacher_4_id
+            		, nth_value(tch.teachernumber, 5) over (
+                        partition by s.schoolid, s.termid, s.id, s.expression 
+                        order by st.roleid, st.start_date 
+                        range between unbounded preceding and unbounded following
+                    ) as teacher_5_id
+            		, nth_value(tch.teachernumber, 6) over (
+                        partition by s.schoolid, s.termid, s.id, s.expression 
+                        order by st.roleid, st.start_date 
+                        range between unbounded preceding and unbounded following
+                    ) as teacher_6_id
+            		, nth_value(tch.teachernumber, 7) over (
+                        partition by s.schoolid, s.termid, s.id, s.expression 
+                        order by st.roleid, st.start_date 
+                        range between unbounded preceding and unbounded following
+                    ) as teacher_7_id
+            		, nth_value(tch.teachernumber, 8) over (
+                        partition by s.schoolid, s.termid, s.id, s.expression 
+                        order by st.roleid, st.start_date 
+                        range between unbounded preceding and unbounded following
+                    ) as teacher_8_id
+            		, nth_value(tch.teachernumber, 9) over (
+                        partition by s.schoolid, s.termid, s.id, s.expression 
+                        order by st.roleid, st.start_date 
+                        range between unbounded preceding and unbounded following
+                    ) as teacher_9_id
+            		, nth_value(tch.teachernumber, 10) over (
+                        partition by s.schoolid, s.termid, s.id, s.expression 
+                        order by st.roleid, st.start_date 
+                        range between unbounded preceding and unbounded following
+                    ) as teacher_10_id
+            		, t.abbreviation || ' : ' || s.external_expression || ' : ' || s.section_number  || ' : ' ||  crs.course_name as name
+            		, s.section_number
+            		, s.grade_level as grade
+            		, crs.course_name
+            		, s.course_number
+            		, crs.course_discipline_desc as course_description
+            		, s.external_expression as period
+            		, crs.course_discipline as subject
+            		
+            		, t.abbreviation as term_name
+            		, t.firstday as term_start
+            		, t.lastday as term_end
+            	from sections s
+					inner join terms t on s.termid = t.id
+	                    and s.schoolid = t.schoolid
+	                inner join (select * from curyear) cy on t.yearid = cy.yearid
+	                inner join (select * from crs) crs on crs.course_number = s.course_number
+	                inner join sectionteacher st on s.id = st.sectionid
+	                inner join (select * from tch) tch on st.teacherid = tch.schoolstaff_id
+	            where 1=1
+	            	and s.no_of_students > 0
+            )
+            , per_sec as (
+            	-- sections compressed for a single period
+            	select distinct
+            		s.schoolid
+            		, 'per-' || first_value(s.id) over (partition by s.schoolid, s.termid, s.teacher, s.expression order by s.no_of_students desc) as sectionid
+                    , ltch.teachernumber as teacher_id
+                    , '' as teacher_2_id
+                    , '' as teacher_3_id
+                    , '' as teacher_4_id
+                    , '' as teacher_5_id
+                    , '' as teacher_6_id
+                    , '' as teacher_7_id
+                    , '' as teacher_8_id
+                    , '' as teacher_9_id
+                    , '' as teacher_10_id
+                    , t.abbreviation || ' : ' || s.external_expression || ' : ' || ltch.last_name  || ' : All Students ' as name
+            		, 'per-' as section_number
+                    , first_value(s.grade_level) over (partition by s.schoolid, s.termid, s.teacher, s.expression order by s.no_of_students desc) as grade
+                    , first_value(crs.course_name) over (partition by s.schoolid, s.termid, s.teacher, s.expression order by s.no_of_students desc) as course_name
+            		, first_value(s.course_number) over (partition by s.schoolid, s.termid, s.teacher, s.expression order by s.no_of_students desc) as course_number
+                    , first_value(crs.course_discipline_desc) over (partition by s.schoolid, s.termid, s.teacher, s.expression order by s.no_of_students desc) as course_description
+                    , s.external_expression as period
+                    , first_value(crs.course_discipline) over (partition by s.schoolid, s.termid, s.teacher, s.expression order by s.no_of_students desc) as subject
+                    , t.abbreviation as term_name
+                    , t.firstday as term_start
+                    , t.lastday as term_end
+            	from sections s
+					inner join terms t on s.termid = t.id
+	                    and s.schoolid = t.schoolid
+	                inner join (select * from curyear) cy on t.yearid = cy.yearid
+	                inner join (select * from crs) crs on crs.course_number = s.course_number
+	                inner join (select * from tch) ltch on s.teacher = ltch.schoolstaff_id
+	            where 1=1
+	            	and s.no_of_students > 0
+            )
+            , both as (
+            	select * from sec
+            	union all
+            	select * from per_sec
+            )  
+            select schoolid
+            	, sectionid
+            	, teacher_id
+            	, teacher_2_id
+            	, teacher_3_id
+            	, teacher_4_id
+            	, teacher_5_id
+            	, teacher_6_id
+            	, teacher_7_id
+            	, teacher_8_id
+            	, teacher_9_id
+            	, teacher_10_id
+            	, name
+            	, section_number
+            	, grade
+            	, course_name
+            	, course_number
+            	, course_description
+            	, period
+            	, subject
+            	, term_name
+            	, term_start
+            	, term_end
+            from both
+            where 1=1
+            order by schoolid, term_name, teacher_id, period
+        ]]>
+	</sql>
+	</query>
+
+</queries>

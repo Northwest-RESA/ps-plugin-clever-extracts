@@ -22,7 +22,7 @@ chmod -R 771 ./scripts
 Shift+Command+B - Runs the Build Task. 
 or Cmd+Shift+P then type Run Build Task
 
-### NWEA Specific naming formats:
+### NWEA Specific naming formats for extension fields:
     sis_id
     ext.head_start
     ext.section_504
@@ -35,6 +35,22 @@ or Cmd+Shift+P then type Run Build Task
     ext.other
 
 # Version History
+
+## 1.0.0
+- Added the other extract file exports for Schools, Teachers, Students, Sections, and Enrollments
+- Changed the naming convention for the PQ 
+- Set Default export options to include 'common' or easily known identifiers for exports
+    - __This is a breaking change__
+    - Students - student_number (This is the local district assigned ID for students)
+    - Teachers - teachernumber (Locally assigned value that is common for teachers across school affiliations)
+    - These values are all linked appropriately to sections and enrollments
+- Added a Period Section that compresses all of the sections for a teacher into a single period section
+    - This sections are linked only to the lead teacher for a group of sections within a period/term
+    - If you want to export without those sections, filter the results by the external_expression # per- 
+- Added a Period Only extract
+    - Only extracts the sections and students for the Period compressed sections
+- Added a button within the description of each new extract that aids in setting the default field linking
+- Added a button within the description of each new extract to remove all existing field links
 
 ## 0.4.1
 - Fixed broken Query

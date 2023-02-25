@@ -1,0 +1,172 @@
+<queries>
+	<query name="nwgaresa.clever.enrollments.periodonly" coreTable="CC" flattened="true" tags="nwgaresa,clever,enrollments,periodonly">
+	<description>
+		<![CDATA[
+			<script type="text/javascript">
+                // columns can only be used once on the export
+                const table = "cc";
+				const colList = [
+					{field:"schoolid", label:"school_id"}
+					, {field:"sectionid", label:"section_id"}
+					, {field:"student_number", label:"student_id"}
+				];
+                function selectDefaultColumns() {
+                    
+                    // force all of the available fields to be displayed
+                    var btn_expall = document.querySelector("button[id=idExpandAll]");
+                    if (btn_expall) { 
+                        btn_expall.click();
+                    } else {
+                        var btn_expTbl = document.querySelector("button[id=" + table + "_expandBtn]")
+                        if (btn_expTbl) {
+                            if (window.getComputedStyle(btn_expTbl).display !== 'none') {
+                                btn_expTbl.click();
+                            }
+                        }
+                    }
+
+                    colList.forEach(col => {
+                        cb = document.querySelector("td[id=columnListContainer] [id^=cb_][id$=" + table + "_" + col.field + "]");
+                        // have to check to see if the item was already selected. If it was... we should skip it
+                        if (cb) {
+                            if (cb.checked) { }
+                        }
+                        cb.click();
+                        if (cb.checked) {
+                            // look for the field in the selected columns and set the label.
+                            document.querySelector("td[id=columnSelectionContainer] input[type=text][id^=label_cb_][id$=" + col.field + "]").value = col.label;
+                        }
+                    });
+                }
+                function removeAllFields() {
+                    document.querySelectorAll("td[id=columnSelectionContainer] input[type=text][id^=label_cb_]").forEach(lbl => {
+                        document.querySelector("td[id=columnSelectionContainer] button[id=" + lbl.id.replace('label', 'delete') + "]").click();
+                    });
+                }
+			</script>
+			<p><b>Pair this export with the &#39;period-only&#39; section export.</b></p>
+			<h2 id="specHeader" class="toggle expanded">Clever enrollments.csv Specification</h2>
+            <div class="hide">
+    			<div class="rounded-box">
+					<ul>
+						<li>Student Section Enrollment export data for Clever.</li>
+						<li>There is a 14 day window before the first day of school and the last day of the school year.</li>
+						<li>Returns all students that are currently enrolled or pre-registered in the current school year.</li>
+						<li>There are no optional fields for this export. Match the student_id to the field that you exported with students.csv.</li>
+					</ul>
+    			</div>
+    			<table align="center" border="0" cellpadding="4" cellspacing="0" class="grid">
+					<thead>
+						<tr>
+							<th>Column Header *</th>
+							<th>Required</th>
+							<th>Format</th>
+							<th>Notes</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td class="bold">school_id</td>
+							<td class="bold">YES</td>
+							<td>String</td>
+							<td>Corresponds to &#39;sis id&#39; field in Clever for the school. Must match a school within schools.csv.</td>
+						</tr>
+						<tr>
+							<td class="bold">section_id</td>
+							<td class="bold">YES</td>
+							<td>String</td>
+							<td>Corresponds to &#39;sis id&#39; field in Clever for the section. Must match a school within sections.csv.</td>
+						</tr>
+						<tr>
+							<td class="bold">student_id</td>
+							<td class="bold">YES</td>
+							<td>String</td>
+							<td>Corresponds to &#39;sis id&#39; field in Clever for the student. Must match a school within students.csv.</td>
+						</tr>
+					</tbody>
+    			</table>
+    		</div>
+			* Header rows must be labeled as listed in the table above. <b>Remove the table name and period from the label.</b> i.e. <i>SCHOOLS.</i>school_id
+            <div class="button-row">
+                <button type="button" onclick="selectDefaultColumns(); return false;">Toggle Default Columns</button>
+                <button type="button" onclick="removeAllFields(); return false;">Remove All Fields</button>
+            </div>
+		]]>
+    </description>
+	<columns>
+		<column column="SCHOOLID">schoolid</column>
+		<column column="SECTIONID">sectionid</column>
+		<column column="STUDENTID">student_id</column>
+		<column column="STUDENTID">student_dcid</column>
+		<column column="STUDENTID">student_number</column>
+		<column column="STUDENTID">student_person_id</column>
+		<column column="STUDENTID">state_studentnumber</column>
+		<column column="STUDENTID">student_lunch_id</column>
+	</columns>
+	<sql>
+		<![CDATA[
+            with curyear as (
+                select t.id
+                    , t.yearid
+                    , t.lastday
+                    , t.firstday
+                    , t.abbreviation
+                    , t.name
+                from terms t
+                    join prefs 
+                        on t.id between to_number(to_char(prefs.value) || '00') and to_number(to_char(prefs.value) || '99')
+                        and lower(prefs.name) = 'coursearchiveyear'
+                where 1=1
+                    and t.schoolid = 0 
+                    and t.isyearrec = 1
+            )
+            , sch as (
+                select 
+                    sch.school_number as schoolid
+                from schools sch
+                where 1=1 
+                    and sch.school_number <> 999999
+            )
+            , curstu as (
+                select stu.dcid, stu.id, stu.person_id
+                    , stu.student_number, stu.state_studentnumber
+                    , stu.lunch_id
+                from students stu
+                    join (select * from curyear) cy on stu.entrydate between cy.firstday and cy.lastday
+                where 1=1
+            )
+            , per_sec as (
+            	-- sections compressed for a single period
+            	select distinct
+            		s.schoolid
+            		, 'per-' || first_value(s.id) over (partition by s.schoolid, s.termid, s.teacher, s.expression order by s.no_of_students desc) as sectionid
+            		, stu.id as student_id
+            		, stu.dcid as student_dcid
+            		, stu.student_number 
+            		, stu.person_id as student_person_id
+            		, stu.state_studentnumber 
+            		, stu.lunch_id as student_lunch_id
+            	from sections s
+					inner join terms t on s.termid = t.id
+	                    and s.schoolid = t.schoolid
+	                inner join (select * from curyear) cy on t.yearid = cy.yearid
+	                inner join cc on cc.sectionid = s.id
+	                inner join (select * from curstu) stu on cc.studentid = stu.id
+	            where 1=1
+	            	and s.no_of_students > 0
+            )
+            select schoolid
+            	, sectionid
+        		, student_id
+        		, student_dcid
+        		, student_number 
+        		, student_person_id
+        		, state_studentnumber 
+        		, student_lunch_id
+            from per_sec
+            where 1=1
+		]]>
+	</sql>
+	</query>
+
+</queries>

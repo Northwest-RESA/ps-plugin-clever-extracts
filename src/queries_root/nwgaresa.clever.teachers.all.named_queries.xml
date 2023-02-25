@@ -1,0 +1,308 @@
+<queries>
+	<query name="nwgaresa.clever.teachers.all" coreTable="USERS" flattened="true" tags="nwgaresa,clever,teacher,all">
+	<description>
+        <![CDATA[
+            <script type="text/javascript">
+                // columns can only be used once on the export
+                const table = "users";
+                const colList = [
+                    {field:"school_id",label:"school_id"},
+                    {field:"teachernumber_as_id",label:"teacher_id"},
+                    {field:"teachernumber",label:"teacher_number"},
+                    {field:"email_addr",label:"teacher_email"},
+                    {field:"first_name",label:"first_name"},
+                    {field:"middle_name",label:"middle_name"},
+                    {field:"last_name",label:"last_name"},
+                    {field:"title",label:"title"},
+                    {field:"teachernumber_as_username",label:"username"},
+                    {field:"teachernumber_as_password",label:"password"}
+                ];
+                function selectDefaultColumns() {
+                    
+                    // force all of the available fields to be displayed
+                    var btn_expall = document.querySelector("button[id=idExpandAll]");
+                    if (btn_expall) { 
+                        btn_expall.click();
+                    } else {
+                        var btn_expTbl = document.querySelector("button[id=" + table + "_expandBtn]")
+                        if (btn_expTbl) {
+                            if (window.getComputedStyle(btn_expTbl).display !== 'none') {
+                                btn_expTbl.click();
+                            }
+                        }
+                    }
+
+                    colList.forEach(col => {
+                        cb = document.querySelector("td[id=columnListContainer] [id^=cb_][id$=" + table + "_" + col.field + "]");
+                        // have to check to see if the item was already selected. If it was... we should skip it
+                        if (cb) {
+                            if (cb.checked) { }
+                        }
+                        cb.click();
+                        if (cb.checked) {
+                            // look for the field in the selected columns and set the label.
+                            document.querySelector("td[id=columnSelectionContainer] input[type=text][id^=label_cb_][id$=" + col.field + "]").value = col.label;
+                        }
+                    });
+                }
+                function removeAllFields() {
+                    document.querySelectorAll("td[id=columnSelectionContainer] input[type=text][id^=label_cb_]").forEach(lbl => {
+                        document.querySelector("td[id=columnSelectionContainer] button[id=" + lbl.id.replace('label', 'delete') + "]").click();
+                    });
+                }
+            </script>
+            <h2 id="specHeader" class="toggle collapsed">Clever schools.csv Specification</h2>
+            <div class="hide">
+                <div class="rounded-box">
+                <ul>
+                    <li>Teacher export data for Clever.</li>
+                    <li>Returns all teacher records that have a section assignment with at least one student for the current school year.</li>
+                    <li>Optional fields can be left blank or excluded from the export.</li>
+                </ul>
+                </div>
+                <table align="center" border="0" cellpadding="4" cellspacing="0" class="grid">
+                    <thead>
+                        <tr>
+                            <th>Column Header *</th>
+                            <th>Required</th>
+                            <th>Format</th>
+                            <th>Notes</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="bold">school_id</td>
+                            <td class="bold">YES</td>
+                            <td>String</td>
+                            <td>Corresponds to &#39;school_id&#39; field in uploaded in the schools file.</td>
+                        </tr>
+                        <tr>
+                            <td class="bold">teacher_id</td>
+                            <td class="bold">YES</td>
+                            <td>String</td>
+                            <td>Unique and constant id for the teacher, may be the teacher_number, state_id, or other unique identifier, to be used in the sections.csv upload. Corresponds to the &#39;sis_id&#39; field in Clever. Unique across the district.</td>
+                        </tr>
+                        <tr>
+                            <td class="">teacher_number</td>
+                            <td class="">NO</td>
+                            <td>String</td>
+                            <td>Local staff identifier. Must be unique across the district.</td>
+                        </tr>
+                        <tr>
+                            <td>state_teacher_id</td>
+                            <td>NO</td>
+                            <td>String</td>
+                            <td>State teacher identifier. <i>Not using this field for GA</i>.</td>
+                        </tr>
+                        <tr>
+                            <td class="bold">teacher_email</td>
+                            <td class="bold">YES</td>
+                            <td>Email</td>
+                            <td>Email address for the teacher. Must match the format: <i>x@y.z</i></td>
+                        </tr>
+                        <tr>
+                            <td class="bold">first_name</td>
+                            <td class="bold">YES</td>
+                            <td>String</td>
+                            <td>First name of the teacher.</td>
+                        </tr>
+                        <tr>
+                            <td class="">middle_name</td>
+                            <td class="">NOS</td>
+                            <td>String</td>
+                            <td>Can also submit the middle initial.</td>
+                        </tr>
+                        <tr>
+                            <td class="bold">last_name</td>
+                            <td class="bold">YES</td>
+                            <td>String</td>
+                            <td>Last name of the teacher.</td>
+                        </tr>
+                        <tr>
+                            <td>title</td>
+                            <td>NO</td>
+                            <td>String</td>
+                            <td>Teacher&#39;s role or title.</td>
+                        </tr>
+                        <tr>
+                            <td class="">username<sup>2</sup></td>
+                            <td class="">NO</td>
+                            <td>String</td>
+                            <td>Teacher&#39;s default username if using Clever Passwords for Instant Login. Usernames will be available to connected applications.</td>
+                        </tr>
+                        <tr>
+                            <td class="">password<sup>3</sup></td>
+                            <td class="">NO</td>
+                            <td>String</td>
+                            <td>Teacher&#39;s default password for Instant Login with Clever Passwords.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            * Header rows must be labeled as listed in the table above. <b>Remove the table name and period from the label.</b> i.e. <i>SCHOOLS.</i>school_id
+            <div class="button-row">
+                <button type="button" onclick="selectDefaultColumns(); return false;">Toggle Default Columns</button>
+                <button type="button" onclick="removeAllFields(); return false;">Remove All Fields</button>
+            </div>
+        ]]>
+    </description>
+	<columns>
+        <column column="SCHOOLSTAFF.DCID" description="The DCID field from the schoolstaff table.">schoolstaff_dcid</column>
+        <column column="SCHOOLSTAFF.ID" description="The ID field from the schoolstaff table.">schoolstaff_id</column>
+        <column column="DCID" description="The DCID field from the users table.">users_dcid</column>
+        <column column="SCHOOLSTAFF.SCHOOLID" description="The SCHOOL_NUMBER reference from the schoolstaff table.">school_id</column>
+        <column column="SCHOOLS.SCHOOL_NUMBER" description="The SCHOOL_NUMBER or ALTERNATE_SCHOOL_NUMBER field from the schools table.">school_number</column>
+		<column column="SCHOOLS.SCHOOL_NUMBER" description="District ID prepended to the school_number">state_id</column>
+        <column column="TEACHERNUMBER" description="Local assigned number for a teacher.">teachernumber</column>
+        <column column="TEACHERNUMBER" description="Local assigned number for a teacher. Duplicated for additional export usage.">teachernumber_as_id</column>
+        <column column="TEACHERNUMBER" description="Local assigned number for a teacher. Duplicated for additional export usage.">teachernumber_as_username</column>
+        <column column="TEACHERNUMBER" description="Local assigned number for a teacher. Duplicated for additional export usage.">teachernumber_as_password</column>
+        <column column="LUNCH_ID" description="LUNCH_ID from the user table.">lunch_id</column>
+        <column column="LOGINID" description="LOGINID from the user table.">loginid</column>
+        <column column="TEACHERLOGINID" description="TEACHERLOGINID from the user table.">teacherloginid</column>
+
+        <column column="PREFERREDNAME">preferred_name</column>
+        <column column="PREFERREDNAME" description="Returns the PREFERREDNAME if defined otherwise the FIRST_NAME from the users table. ">preferred_first_name</column>
+        <column column="FIRST_NAME">first_name</column>
+        <column column="MIDDLE_NAME">middle_name</column>
+        <column column="LAST_NAME">last_name</column>
+        <column column="LASTFIRST" description="PowerSchool combines name as: last, first middle. ">lastfirst</column>
+        
+        <column column="EMAIL_ADDR">email_addr</column>
+        <column column="EMAIL_ADDR">email_addr_no_domain</column>
+        
+        <column column="HOMEROOM">homeroom</column>
+        <column column="TITLE">title</column>
+        <column column="HOMESCHOOLID">homeschoolid</column>
+        
+        <column column="TRANSACTION_DATE" description="Date and time of the last edit performed on the teacher record.">date_last_modified</column>
+	</columns>
+	<sql>
+        <![CDATA[
+            with curyear as (
+                select t.id
+                    , t.yearid
+                    , t.lastday
+                    , t.firstday
+                    , t.abbreviation
+                    , t.name
+                from terms t
+                    join prefs 
+                        on t.id between to_number(to_char(prefs.value) || '00') and to_number(to_char(prefs.value) || '99')
+                        and lower(prefs.name) = 'coursearchiveyear'
+                where 1=1
+                    and t.schoolid = 0 
+                    and t.isyearrec = 1
+            )
+            , district as (
+                select district_id from (
+                    select value as district_id, row_number() over (order by null) rn from prefs where name = 'districtnumber'
+                ) x where x.rn = 1
+            )
+            , sch as (
+                select 
+                    sch.dcid
+                    , sch.id
+                    , sch.school_number as schoolid
+                    , sch.alternate_school_number
+                    , case when coalesce(sch.alternate_school_number, 0) <> 0 then sch.alternate_school_number else sch.school_number end as school_number
+                    , lpad(d.district_id, 3, '0') 
+                        || lpad(
+                            case when coalesce(sch.alternate_school_number, 0) <> 0 then sch.alternate_school_number else sch.school_number end     
+                            , 4, '0') as state_school_id
+                    , sch.name 
+                    , sch.abbreviation
+                    , sch.low_grade as low_grade_id
+                    , sch.high_grade as high_grade_id
+                    , sch.sortorder
+                    , coalesce(sch.transaction_date, to_date('01/01/1900', 'MM/DD/YYYY')) as date_last_modified
+                from schools sch, (select * from district) d
+                where 1=1 
+                    and sch.school_number <> 999999
+            )
+            , tch as (
+                select 
+                    ss.dcid as schoolstaff_dcid
+                    , ss.id as schoolstaff_id
+                    , ss.users_dcid
+                    , ss.schoolid
+                    , sch.school_number
+                    , sch.state_school_id
+                    , usr.teachernumber
+                    , usr.teachernumber as teachernumber_as_id
+                    , usr.teachernumber as teachernumber_as_username
+                    , usr.teachernumber as teachernumber_as_password
+                    , usr.lunch_id
+                    , usr.loginid
+                    , usr.teacherloginid
+                    , usr.preferredname
+                    , coalesce(usr.preferredname, usr.first_name) as preferred_first_name
+                    , usr.lastfirst
+                    , usr.last_name
+                    , usr.first_name
+                    , usr.middle_name
+                    , lower(usr.email_addr) as email_addr
+                    , substr(lower(usr.email_addr), 1, instr(usr.email_addr, '@') - 1) as email_addr_no_domain
+                    , usr.homeroom
+                    , usr.title
+                    , usr.homeschoolid
+                    , greatest(
+                        coalesce(ss.transaction_date, to_date('01/01/1900', 'MM/DD/YYYY'))
+                        , coalesce(usr.transaction_date, to_date('01/01/1900', 'MM/DD/YYYY'))
+                    ) as date_last_modified
+                    , row_number() over (partition by usr.teachernumber order by usr.teachernumber, case when usr.homeschoolid = ss.schoolid then 0 else 1 end, sch.sortorder) seq
+                from schoolstaff ss
+                    inner join users usr on ss.users_dcid = usr.dcid
+                    inner join (select * from sch) sch on sch.schoolid = ss.schoolid 
+                where 1=1
+                    and ss.status = 1 -- Active Staff record
+                    -- Sometimes you schedule staff that are admin status on sections
+                    --and ss.staffstatus = 1 -- Teacher record
+                    --and usr.ptaccess -- 1 = Can login to the teacher portal
+            )
+            , sect as (
+                select distinct st.teacherid
+                from sections sec
+                    inner join terms t on sec.termid = t.id
+                        and sec.schoolid = t.schoolid
+                    inner join (select * from curyear) cy on t.yearid = cy.yearid
+                    inner join sectionteacher st on sec.id = st.sectionid
+                where 1=1
+                    and sec.no_of_students > 0
+            )            
+            select 
+                    tch.schoolstaff_dcid
+                    , tch.schoolstaff_id
+                    , tch.users_dcid
+                    , tch.schoolid
+                    , tch.school_number
+                    , tch.state_school_id
+                    , tch.teachernumber
+                    , tch.teachernumber_as_id
+                    , tch.teachernumber_as_username
+                    , tch.teachernumber_as_password
+                    , tch.lunch_id
+                    , tch.loginid
+                    , tch.teacherloginid
+                    , tch.preferredname
+                    , tch.preferred_first_name
+                    , tch.lastfirst
+                    , tch.last_name
+                    , tch.first_name
+                    , tch.middle_name
+                    , tch.email_addr
+                    , tch.email_addr_no_domain
+                    , tch.homeroom
+                    , tch.title
+                    , tch.homeschoolid
+                    , tch.date_last_modified
+            from (select * from tch) tch
+                inner join (select * from sect) sect on tch.schoolstaff_id = sect.teacherid
+            where 1=1
+                -- Returns a single record per teacher affiliation with preference to the Home School of the teacher.
+                and tch.seq = 1
+        ]]>
+	</sql>
+	</query>
+
+</queries>

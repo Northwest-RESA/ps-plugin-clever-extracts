@@ -1,0 +1,281 @@
+<queries>
+	<query name="nwgaresa.clever.schools.all" coreTable="SCHOOLS" flattened="true" tags="nwgaresa,clever,school,all">
+	<description>
+        <![CDATA[
+            <script type="text/javascript">
+                // columns can only be used once on the export
+                const table = "schools";
+                const colList = [
+                    {field:"schoolid",label:"school_id"},
+                    {field:"school_name",label:"school_name"},
+                    {field:"school_number",label:"school_number"},
+                    {field:"state_id",label:"state_id"},
+                    {field:"low_grade",label:"low_grade"},
+                    {field:"high_grade",label:"high_grade"},
+                    {field:"principal",label:"principal"},
+                    {field:"principalemail",label:"principal_email"},
+                    {field:"schooladdress",label:"school_address"},
+                    {field:"schoolcity",label:"school_city"},
+                    {field:"schoolstate",label:"school_state"},
+                    {field:"schoolzip",label:"school_zip"},
+                    {field:"schoolphone",label:"school_phone"}
+                ];
+                function selectDefaultColumns() {
+                    
+                    // force all of the available fields to be displayed
+                    var btn_expall = document.querySelector("button[id=idExpandAll]");
+                    if (btn_expall) { 
+                        btn_expall.click();
+                    } else {
+                        var btn_expTbl = document.querySelector("button[id=" + table + "_expandBtn]")
+                        if (btn_expTbl) {
+                            if (window.getComputedStyle(btn_expTbl).display !== 'none') {
+                                btn_expTbl.click();
+                            }
+                        }
+                    }
+
+                    colList.forEach(col => {
+                        cb = document.querySelector("td[id=columnListContainer] [id^=cb_][id$=" + table + "_" + col.field + "]");
+                        // have to check to see if the item was already selected. If it was... we should skip it
+                        if (cb) {
+                            if (cb.checked) { }
+                        }
+                        cb.click();
+                        if (cb.checked) {
+                            // look for the field in the selected columns and set the label.
+                            document.querySelector("td[id=columnSelectionContainer] input[type=text][id^=label_cb_][id$=" + col.field + "]").value = col.label;
+                        }
+                    });
+                }
+                function removeAllFields() {
+                    document.querySelectorAll("td[id=columnSelectionContainer] input[type=text][id^=label_cb_]").forEach(lbl => {
+                        document.querySelector("td[id=columnSelectionContainer] button[id=" + lbl.id.replace('label', 'delete') + "]").click();
+                    });
+                }
+            </script>
+            <h2 id="specHeader" class="toggle collapsed">Clever schools.csv Specification</h2>
+            <div class="hide">
+                <div class="rounded-box">
+                <ul>
+                    <li>School export data for Clever.</li>
+                    <li>Returns all schools that have a full year term for the current year, <i> excluding the Graduated Students school</i>.</li>
+                    <li>Optional fields can be left blank or excluded from the export.</li>
+                </ul>
+                </div>
+                <table align="center" border="0" cellpadding="4" cellspacing="0" class="grid">
+                    <thead>
+                        <tr>
+                            <th>Column Header *</th>
+                            <th>Required</th>
+                            <th>Format</th>
+                            <th>Notes</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="bold">school_id</td>
+                            <td class="bold">YES</td>
+                            <td>String</td>
+                            <td>Corresponds to &#39;sis id&#39; field in Clever. Must be unique across the district.</td>
+                        </tr>
+                        <tr>
+                            <td class="bold">school_name</td>
+                            <td class="bold">YES</td>
+                            <td>String</td>
+                            <td>Name of the school.</td>
+                        </tr>
+                        <tr>
+                            <td class="bold">school_number</td>
+                            <td class="bold">YES</td>
+                            <td>String</td>
+                            <td>District school identifier.</td>
+                        </tr>
+                        <tr>
+                            <td>state_id</td>
+                            <td>NO</td>
+                            <td>String</td>
+                            <td>State school identifier. Using the GTID.</td>
+                        </tr>
+                        <tr>
+                            <td>low_grade</td>
+                            <td>NO</td>
+                            <td>Option</td>
+                            <td>The lowest grade at the school. Can be an integer (1-12), &quot;Kindergarten&quot;, &quot;Prekindergarten&quot;, or &quot;Postgraduate&quot;.</td>
+                        </tr>
+                        <tr>
+                            <td>high_grade</td>
+                            <td>NO</td>
+                            <td>Option</td>
+                            <td>The highest grade at the school. Can be an integer (1-12), &quot;Kindergarten&quot;, &quot;Prekindergarten&quot;, or &quot;Postgraduate&quot;.</td>
+                        </tr>
+                        <tr>
+                            <td>principal</td>
+                            <td>NO</td>
+                            <td>String</td>
+                            <td>Principal&#39;s name.</td>
+                        </tr>
+                        <tr>
+                            <td>principal_email</td>
+                            <td>NO</td>
+                            <td>Email</td>
+                            <td>Principal&#39;s email address. Not sent if format doesn&#39;t match this format: <i>x@y.z</i>.</td>
+                        </tr>
+                        <tr>
+                            <td class="bold">school_address</td>
+                            <td class="bold">YES</td>
+                            <td>String</td>
+                            <td>School&#39;s address. Required by some of Clever&#39;s applications.</td>
+                        </tr>
+                        <tr>
+                            <td class="bold">school_city</td>
+                            <td class="bold">YES</td>
+                            <td>String</td>
+                            <td>Required by some of Clever&#39;s applications.</td>
+                        </tr>
+                        <tr>
+                            <td class="bold">school_state</td>
+                            <td class="bold">YES</td>
+                            <td>String</td>
+                            <td>Required by some of Clever&#39;s applications.</td>
+                        </tr>
+                        <tr>
+                            <td class="bold">school_zip</td>
+                            <td class="bold">YES</td>
+                            <td>String</td>
+                            <td>Alphanumeric 5 or 9 digit <b>NO Punctuation</b>. Required by some of Clever&#39;s applications.</td>
+                        </tr>
+                        <tr>
+                            <td>school_phone</td>
+                            <td>YES</td>
+                            <td>Integer</td>
+                            <td>10 or 11 digit phone number.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            * Header rows must be labeled as listed in the table above. <b>Remove the table name and period from the label.</b> i.e. <i>SCHOOLS.</i>school_id
+            <div class="button-row">
+                <button type="button" onclick="selectDefaultColumns(); return false;">Toggle Default Columns</button>
+                <button type="button" onclick="removeAllFields(); return false;">Remove All Fields</button>
+            </div>
+        ]]>
+    </description>
+	<columns>
+        <column column="DCID" description="The DCID field from the schools table.">school_dcid</column>
+        <column column="ID" description="The ID field from the schools table.">school_id</column>
+        <column column="SCHOOL_NUMBER" description="The SCHOOL_NUMBER field from the schools table.">schoolid</column>
+        <column column="SCHOOL_NUMBER" description="The ALTERNATE_SCHOOL_NUMBER field from the schools table.">alternate_school_number</column>
+        <column column="SCHOOL_NUMBER" description="School Number or Alternate School Number, if specified.">school_number</column>
+		<column column="SCHOOL_NUMBER" description="District ID prepended to the school_number">state_id</column>
+        <column column="NAME">school_name</column>
+		<column column="ABBREVIATION" description="Abbreviation field from the schools table.">school_shortname</column>
+		<column column="LOW_GRADE" description="Numerical number for the grade level.">low_grade_id</column>
+		<column column="HIGH_GRADE" description="Numerical number for the grade level.">high_grade_id</column>
+		<column column="LOW_GRADE" description="Grade level description for the lowest grade for the school.">low_grade</column>
+		<column column="HIGH_GRADE" description="Grade level description for the highest grade for the school.">high_grade</column>
+		<column column="PRINCIPAL">principal</column>
+		<column column="PRINCIPALEMAIL" description="Validated email address for the principal. Blank if the email doesn&#39;t match the pattern: &#39;y@x.z&#39;">principalemail</column>
+		<column column="SCHOOLADDRESS">schooladdress</column>
+		<column column="SCHOOLCITY">schoolcity</column>
+		<column column="SCHOOLSTATE" description="Limited to the first two characters of the state field.">schoolstate</column>
+		<column column="SCHOOLZIP" description="Numerical characters found in the SCHOOLZIP field in the schools table.">schoolzip</column>
+		<column column="SCHOOLPHONE" description="Numerical characters found in the SCHOOLPHONE field in the schools table.">schoolphone</column>
+		<column column="STATE_EXCLUDEFROMREPORTING" description="1 indicates this school is not reporting on state reports.">state_excludefromreporting</column>
+        <column column="TRANSACTION_DATE" description="Date and time of the last edit performed on the school table record.">date_last_modified</column>
+	</columns>
+	<sql>
+        <![CDATA[
+            with curyear as (
+                select t.id
+                    , t.yearid
+                    , t.lastday
+                    , t.firstday
+                    , t.abbreviation
+                    , t.name
+                from terms t
+                    join prefs 
+                        on t.id between to_number(to_char(prefs.value) || '00') and to_number(to_char(prefs.value) || '99')
+                        and lower(prefs.name) = 'coursearchiveyear'
+                where 1=1
+                    and t.schoolid = 0 
+                    and t.isyearrec = 1
+            )
+            , district as (
+                select district_id from (
+                    select value as district_id, row_number() over (order by null) rn from prefs where name = 'districtnumber'
+                ) x where x.rn = 1
+            )
+            , sch as (
+                select 
+                    sch.dcid
+                    , sch.id
+                    , sch.school_number as schoolid
+                    , sch.alternate_school_number
+                    , case when coalesce(sch.alternate_school_number, 0) <> 0 then sch.alternate_school_number else sch.school_number end as school_number
+                    , lpad(d.district_id, 3, '0') 
+                        || lpad(
+                            case when coalesce(sch.alternate_school_number, 0) <> 0 then sch.alternate_school_number else sch.school_number end     
+                            , 4, '0') as state_id
+                    , sch.name 
+                    , sch.abbreviation
+                    , sch.low_grade as low_grade_id
+                    , sch.high_grade as high_grade_id
+                    , case 
+                        when sch.low_grade <=-1 then 'Prekindergarten'
+                        when sch.low_grade =0 then 'Kindergarten'
+                        when sch.low_grade >12 then 'Postgraduate'
+                        else cast(sch.low_grade as varchar(2)) 
+                    end as low_grade
+                    , case 
+                        when sch.high_grade <=-1 then 'Prekindergarten'
+                        when sch.high_grade =0 then 'Kindergarten'
+                        when sch.high_grade >12 then 'Postgraduate'
+                        else cast(sch.high_grade as varchar(2)) 
+                    end as high_grade
+                    , sch.principal
+                    , case when regexp_like(sch.principalemail, '^(\S+)\@(\S+)\.(\S+)$') then sch.principalemail end as principalemail
+                    , sch.schooladdress
+                    , sch.schoolcity
+                    , upper(substr(sch.schoolstate, 1, 2)) as schoolstate
+                    , regexp_replace(sch.schoolzip, '[^0-9]+', '') as schoolzip
+                    , regexp_replace(sch.schoolphone, '[^0-9]+', '') as schoolphone
+                    , sch.state_excludefromreporting
+                    , coalesce(sch.transaction_date, to_date('01/01/1900', 'MM/DD/YYYY')) as date_last_modified
+                from schools sch, (select * from district) d
+                where 1=1 
+                    and sch.school_number <> 999999
+            )
+            
+            select 
+                sch.dcid
+                , sch.id
+                , sch.schoolid
+                , sch.alternate_school_number
+                , sch.school_number
+                , sch.state_id
+                , sch.name 
+                , sch.abbreviation
+                , sch.low_grade_id
+                , sch.high_grade_id
+                , sch.low_grade
+                , sch.high_grade
+                , sch.principal
+                , sch.principalemail
+                , sch.schooladdress
+                , sch.schoolcity
+                , sch.schoolstate
+                , sch.schoolzip
+                , sch.schoolphone
+                , sch.state_excludefromreporting
+                , sch.date_last_modified
+            from (select * from sch) sch
+                inner join terms t on sch.schoolid = t.schoolid
+                    and t.isyearrec = 1
+                inner join (select * from curyear) cy on t.id = cy.id
+            where 1=1
+        ]]>
+	</sql>
+	</query>
+
+</queries>

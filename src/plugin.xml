@@ -3,42 +3,102 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation='http://plugin.powerschool.pearson.com plugin.xsd'
     name="Northwest RESA - Clever Data Exports"
-    version="0.4.1"
+    version="1.0.0"
     description="PowerSchool plugin developed by Northwest GA RESA to allow districts to use Power Queries to submit files to Clever via SFTP.">
 
     <oauth></oauth>
 
     <access_request>
-        
         <field table="PREFS" field="VALUE" access="ViewOnly" />
         <field table="PREFS" field="NAME" access="ViewOnly" />
+        <field table="PREFS" field="TRANSACTION_DATE" access="ViewOnly" />
+    
+        <field table="SCHOOLS" field="SCHOOL_NUMBER" access="ViewOnly" />
+        <field table="SCHOOLS" field="ID" access="ViewOnly" />
+        <field table="SCHOOLS" field="NAME" access="ViewOnly" />
+        <field table="SCHOOLS" field="LOW_GRADE" access="ViewOnly" />
+        <field table="SCHOOLS" field="HIGH_GRADE" access="ViewOnly" />
+        <field table="SCHOOLS" field="PRINCIPAL" access="ViewOnly" />
+        <field table="SCHOOLS" field="PRINCIPALEMAIL" access="ViewOnly" />
+        <field table="SCHOOLS" field="SCHOOLADDRESS" access="ViewOnly" />
+        <field table="SCHOOLS" field="SCHOOLCITY" access="ViewOnly" />
+        <field table="SCHOOLS" field="SCHOOLSTATE" access="ViewOnly" />
+        <field table="SCHOOLS" field="SCHOOLZIP" access="ViewOnly" />
+        <field table="SCHOOLS" field="SCHOOLPHONE" access="ViewOnly" />
+        <field table="SCHOOLS" field="ALTERNATE_SCHOOL_NUMBER" access="ViewOnly" />
+        <field table="SCHOOLS" field="STATE_EXCLUDEFROMREPORTING" access="ViewOnly" />
+        <field table="SCHOOLS" field="TRANSACTION_DATE" access="ViewOnly" />
+        <field table="TERMS" field="ID" access="ViewOnly" />
+		<field table="TERMS" field="SCHOOLID" access="ViewOnly" />
+        <field table="TERMS" field="LASTDAY" access="ViewOnly" />
+        <field table="TERMS" field="ISYEARREC" access="ViewOnly" /> 
+        <field table="STUDENTS" field="ID" access="ViewOnly" />
+        <field table="STUDENTS" field="DCID" access="ViewOnly" />
+        <field table="STUDENTS" field="PERSON_ID" access="ViewOnly" />
+        <field table="STUDENTS" field="SCHOOLID" access="ViewOnly" />
+        <field table="STUDENTS" field="STUDENT_NUMBER" access="ViewOnly" />
+        <field table="STUDENTS" field="STATE_STUDENTNUMBER" access="ViewOnly" />
+        <field table="STUDENTS" field="ENTRYDATE" access="ViewOnly" />
+        <field table="STUDENTS" field="EXITDATE" access="ViewOnly" />
+        <field table="STUDENTS" field="ENROLL_STATUS" access="ViewOnly" />
+        <field table="STUDENTS" field="GRADE_LEVEL" access="ViewOnly" />
+        <field table="STUDENTS" field="LUNCHSTATUS" access="ViewOnly" />
+        <field table="STUDENTS" field="LAST_NAME" access="ViewOnly" />
+        <field table="STUDENTS" field="MIDDLE_NAME" access="ViewOnly" />
+        <field table="STUDENTS" field="FIRST_NAME" access="ViewOnly" />
+        <field table="STUDENTS" field="TRANSACTION_DATE" access="ViewOnly" />
+        <field table="STUDENTS" field="GENDER" access="ViewOnly" />
+        <field table="STUDENTS" field="DOB" access="ViewOnly" />
+        <field table="STUDENTS" field="STATE_EXCLUDEFROMREPORTING" access="ViewOnly" />
+
+        <field table="STUDENTCOREFIELDS" field="PRIMARYLANGUAGE" access="ViewOnly" />
 
         <field table="S_GA_STU_ESOL_C" field="STUDENTSDCID" access="ViewOnly" />
         <field table="S_GA_STU_GIFTED_C" field="STUDENTSDCID" access="ViewOnly" />
         <field table="S_GA_STU_SPECED_X" field="STUDENTSDCID" access="ViewOnly" />
-        <field table="S_GA_STU_504_C" field="STUDENTSDCID" access="ViewOnly" />
-
-        <field table="STUDENTS" field="ID" access="ViewOnly" />
-        <field table="STUDENTS" field="DCID" access="ViewOnly" />
-        <field table="STUDENTS" field="STUDENT_NUMBER" access="ViewOnly" />
-        <field table="STUDENTS" field="STATE_STUDENTNUMBER" access="ViewOnly" />
-        <field table="STUDENTS" field="LAST_NAME" access="ViewOnly" />
-        <field table="STUDENTS" field="MIDDLE_NAME" access="ViewOnly" />
-        <field table="STUDENTS" field="FIRST_NAME" access="ViewOnly" />
-        <field table="STUDENTS" field="LASTFIRST" access="ViewOnly" />
-
-        <field table="STUDENTS" field="GRADE_LEVEL" access="ViewOnly" />
-        <field table="STUDENTS" field="SCHOOLID" access="ViewOnly" />
-        <field table="STUDENTS" field="ENTRYDATE" access="ViewOnly" />
-        <field table="STUDENTS" field="EXITDATE" access="ViewOnly" />
-        <field table="STUDENTS" field="LUNCHSTATUS" access="ViewOnly" />
-        <field table="STUDENTS" field="STATE_EXCLUDEFROMREPORTING" access="ViewOnly" />
+        <field table="S_GA_STU_504_C" field="STUDENTSDCID" access="ViewOnly" /> 
         
-        <field table="TERMS" field="ID" access="ViewOnly" />
-		<field table="TERMS" field="SCHOOLID" access="ViewOnly" />
-        <field table="TERMS" field="LASTDAY" access="ViewOnly" />
-        <field table="TERMS" field="ISYEARREC" access="ViewOnly" />
-    
+        <field table="USERS" field="DCID" access="ViewOnly" /> 
+        <field table="USERS" field="ID" access="ViewOnly" /> 
+        <field table="USERS" field="TEACHERNUMBER" access="ViewOnly" /> 
+        <field table="USERS" field="FIRST_NAME" access="ViewOnly" /> 
+        <field table="USERS" field="LAST_NAME" access="ViewOnly" /> 
+        <field table="USERS" field="MIDDLE_NAME" access="ViewOnly" /> 
+        <field table="USERS" field="LUNCH_ID" access="ViewOnly" /> 
+        <field table="USERS" field="LOGINID" access="ViewOnly" /> 
+        <field table="USERS" field="TEACHERLOGINID" access="ViewOnly" /> 
+        <field table="USERS" field="PREFERREDNAME" access="ViewOnly" /> 
+        <field table="USERS" field="EMAIL_ADDR" access="ViewOnly" /> 
+        <field table="USERS" field="HOMEROOM" access="ViewOnly" /> 
+        <field table="USERS" field="TITLE" access="ViewOnly" /> 
+        <field table="USERS" field="HOMESCHOOLID" access="ViewOnly" /> 
+        <field table="USERS" field="TRANSACTION_DATE" access="ViewOnly" /> 
+        
+        <field table="SCHOOLSTAFF" field="DCID" access="ViewOnly" /> 
+        <field table="SCHOOLSTAFF" field="ID" access="ViewOnly" /> 
+        <field table="SCHOOLSTAFF" field="SCHOOLID" access="ViewOnly" /> 
+
+        <field table="SECTIONS" field="ID" access="ViewOnly" /> 
+        <field table="SECTIONS" field="SECTION_NUMBER" access="ViewOnly" /> 
+        <field table="SECTIONS" field="COURSE_NUMBER" access="ViewOnly" /> 
+        <field table="SECTIONS" field="NO_OF_STUDENTS" access="ViewOnly" /> 
+        <field table="SECTIONS" field="GRADE_LEVEL" access="ViewOnly" /> 
+        <field table="SECTIONS" field="EXPRESSION" access="ViewOnly" /> 
+        <field table="SECTIONS" field="EXTERNAL_EXPRESSION" access="ViewOnly" /> 
+        <field table="SECTIONS" field="ID" access="ViewOnly" /> 
+        <field table="SECTIONS" field="ID" access="ViewOnly" /> 
+
+
+        <field table="COURSES" field="ID" access="ViewOnly" /> 
+        <field table="COURSES" field="COURSE_NUMBER" access="ViewOnly" /> 
+        <field table="COURSES" field="COURSE_NAME" access="ViewOnly" /> 
+        
+        <field table="CC" field="SCHOOLID" access="ViewOnly" /> 
+        <field table="CC" field="SECTIONID" access="ViewOnly" /> 
+        <field table="CC" field="STUDENTID" access="ViewOnly" /> 
+
+
+
     </access_request>
 
     <publisher name="Northwest RESA">

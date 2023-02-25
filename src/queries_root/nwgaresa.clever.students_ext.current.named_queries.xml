@@ -1,0 +1,250 @@
+<queries>
+	<query name="nwgaresa.clever.students_ext.current" coreTable="STUDENTS" flattened="true" tags="nwgaresa,clever,student,extension,current">
+	<description>
+		<![CDATA[
+			<script type="text/javascript">
+                // columns can only be used once on the export
+                const table = "students";
+				const colList = [
+					{field:"student_number", label:"sis_id"}
+					, {field:"section_504", label:"ext.section_504"}
+					, {field:"special_education", label:"ext.special_education"}
+					, {field:"talented_gifted", label:"ext.talented_gifted"}
+					, {field:"frl", label:"ext.frl"}
+					, {field:"ell", label:"ext.ell"}
+				];
+                function selectDefaultColumns() {
+                    
+                    // force all of the available fields to be displayed
+                    var btn_expall = document.querySelector("button[id=idExpandAll]");
+                    if (btn_expall) { 
+                        btn_expall.click();
+                    } else {
+                        var btn_expTbl = document.querySelector("button[id=" + table + "_expandBtn]")
+                        if (btn_expTbl) {
+                            if (window.getComputedStyle(btn_expTbl).display !== 'none') {
+                                btn_expTbl.click();
+                            }
+                        }
+                    }
+
+                    colList.forEach(col => {
+                        cb = document.querySelector("td[id=columnListContainer] [id^=cb_][id$=" + table + "_" + col.field + "]");
+                        // have to check to see if the item was already selected. If it was... we should skip it
+                        if (cb) {
+                            if (cb.checked) { }
+                        }
+                        cb.click();
+                        if (cb.checked) {
+                            // look for the field in the selected columns and set the label.
+                            document.querySelector("td[id=columnSelectionContainer] input[type=text][id^=label_cb_][id$=" + col.field + "]").value = col.label;
+                        }
+                    });
+                }
+                function removeAllFields() {
+                    document.querySelectorAll("td[id=columnSelectionContainer] input[type=text][id^=label_cb_]").forEach(lbl => {
+                        document.querySelector("td[id=columnSelectionContainer] button[id=" + lbl.id.replace('label', 'delete') + "]").click();
+                    });
+                }
+			</script>
+			<h2 id="specHeader" class="toggle expanded">Clever students_ext.csv Specification</h2>
+ 			<div class="hide">
+    			<div class="rounded-box">
+					<ul>
+						<li>Student Extension Field export data for Clever.</li>
+						<li>There is a 14 day window before the first day of school and the last day of the school year.</li>
+						<li>Returns all students that are currently enrolled or pre-registered in the current school year.</li>
+						<li>Optional fields can be left blank or excluded from the export.</li>
+					</ul>
+    			</div>
+    			<table align="center" border="0" cellpadding="4" cellspacing="0" class="grid">
+					<thead>
+						<tr>
+							<th>Column Header *</th>
+							<th>Required</th>
+							<th>Format</th>
+							<th>Notes</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td class="bold">sis_id</td>
+							<td class="bold">YES</td>
+							<td>String</td>
+							<td>Corresponds to &#39;sis id&#39; field in Clever for the student. Must match a student within students.csv.</td>
+						</tr>
+						<tr>
+							<td class="">ext.special_education</td>
+							<td class="">NO</td>
+							<td>String</td>
+							<td>Provides the NWEA Mapping value of &#39;Special Education (SPED)&#39; for students enrolled in special education.</td>
+						</tr>
+						<tr>
+							<td>ext.section_504</td>
+							<td>NO</td>
+							<td>String</td>
+							<td>Provides the NWEA Mapping value of &#39;Section 504&#39; for students with a Section 504 enrollment.</td>
+						</tr>
+						<tr>
+							<td>ext.talented_gifted</td>
+							<td>NO</td>
+							<td>String</td>
+							<td>Provides the NWEA Mapping value of &#39;Talented and Gifted (TAG)&#39; for students with a Gifted enrollment.</td>
+						</tr>
+						<tr>
+							<td class="">ext.frl</td>
+							<td class="">NO</td>
+							<td>String</td>
+							<td>Provides the NWEA Mapping value of &#39;Free and Reduced Lunch (FRL)&#39; for students with reduced or free lunch status.</td>
+						</tr>
+						<tr>
+							<td class="">ext.ell</td>
+							<td class="">NO</td>
+							<td>String</td>
+							<td>Provides the NWEA Mapping value of &#39;English Language Learner (ELL)&#39; for students with an EL enrollment.</td>
+						</tr>
+					</tbody>
+    			</table>
+    		</div>
+			* Header rows must be labeled as listed in the table above. <b>Remove the table name and period from the label.</b> i.e. <i>SCHOOLS.</i>school_id
+            <div class="button-row">
+                <button type="button" onclick="selectDefaultColumns(); return false;">Toggle Default Columns</button>
+                <button type="button" onclick="removeAllFields(); return false;">Remove All Fields</button>
+            </div>
+		]]>
+    </description>
+	<columns>
+		<column column="STUDENTS.DCID">dcid</column>
+		<column column="STUDENTS.ID">id</column>
+		<column column="STUDENTS.STUDENT_NUMBER">student_number</column>
+		<column column="STUDENTS.STATE_STUDENTNUMBER">state_studentnumber</column>
+		<column column="STUDENTS.LAST_NAME">last_name</column>
+		<column column="STUDENTS.FIRST_NAME">first_name</column>
+		<column column="STUDENTS.MIDDLE_NAME">middle_name</column>
+		<column column="STUDENTS.LASTFIRST">lastfirst</column>
+		<column column="STUDENTS.ENTRYDATE">entrydate</column>
+		<column column="STUDENTS.EXITDATE">exitdate</column>
+		<column column="STUDENTS.GRADE_LEVEL">grade_level</column>
+		<column column="STUDENTS.SCHOOLID">schoolid</column>
+		<column column="STUDENTS.LUNCHSTATUS">lunchstatus</column>
+		<column column="STUDENTS.STATE_EXCLUDEFROMREPORTING">state_excludefromreporting</column>
+		<column column="STUDENTS.LUNCHSTATUS">section_504</column>
+		<column column="STUDENTS.LUNCHSTATUS">special_education</column>
+		<column column="STUDENTS.LUNCHSTATUS">talented_gifted</column>
+		<column column="STUDENTS.LUNCHSTATUS">frl</column>
+		<column column="STUDENTS.LUNCHSTATUS">ell</column>
+	</columns>
+	<sql>
+		<![CDATA[
+            -- buffering with a 14 window before the first day of school and the last day of the school year
+            with curyear as (
+                select t.id
+                    , t.yearid
+                    , t.lastday
+                    , t.firstday
+                    , t.abbreviation
+                    , t.name
+                from terms t
+                    join prefs 
+                        on t.id between to_number(to_char(prefs.value) || '00') and to_number(to_char(prefs.value) || '99')
+                        and lower(prefs.name) = 'coursearchiveyear'
+                where 1=1
+                    and t.schoolid = 0 
+                    and t.isyearrec = 1
+            )
+			, curstu as (
+				select stu.dcid, stu.id, stu.student_number, stu.state_studentnumber
+					, stu.last_name, stu.first_name, stu.middle_name
+					, stu.lastfirst
+					, stu.entrydate, stu.exitdate
+					, stu.grade_level
+					, stu.ENROLL_STATUS 
+					, stu.schoolid
+					, stu.lunchstatus
+					, stu.state_excludefromreporting
+				from students stu
+					join (select * from curyear) cy on stu.entrydate between cy.firstday and cy.lastday
+				where 1=1
+					and stu.enroll_status in (0, -1)
+			)
+
+			, gifted as (
+				-- students that are currenty gifted
+				select distinct g.studentsdcid   
+				from s_ga_stu_gifted_c g
+					join (select * from curyear) cy on coalesce(g.exitdate, sysdate) >= cy.firstday
+				where 1=1
+					and g.giftedprogram = 1 -- Enrolled
+					and g.servicecode = 1 -- Served this year 2 = not served this year
+			)
+
+			, esol as (
+				-- students that are currently el
+				select DISTINCT el.studentsdcid 
+				from s_ga_stu_esol_c el
+					join (select * from curyear) cy on coalesce(el.exitdate, sysdate) >= cy.firstday
+				where 1=1
+					--and el.isesol = 1 -- being served currently
+					and upper(el.elflag) = 'Y' -- Y, F, M, [null]
+			)
+
+			, sped as (
+				-- use s_ga_ren_speced_x for historical data (not needed for this query since we are assuming current year)
+				select distinct sped.studentsdcid
+				from s_ga_stu_speced_x sped
+					join (select * from curyear) cy on coalesce(sped.exitdate, sysdate) between cy.firstday and cy.lastday
+				where 1=1
+					and upper(sped.all_iep) = 'Y'  -- excluding Service plan only students
+			)
+
+			, sec504 as (
+				-- students marked 504 during the current year
+				select distinct s504.studentsdcid 
+				from s_ga_stu_504_c s504
+					join (select * from curyear) cy on coalesce(s504.exitdate, sysdate) BETWEEN cy.firstday AND cy.lastday
+				where 1=1
+					and s504.is504 = 1
+			)
+
+			select curstu.dcid
+				, curstu.id
+				, curstu.student_number
+				, curstu.state_studentnumber
+				
+				, curstu.last_name
+				, curstu.first_name
+				, curstu.middle_name
+				, curstu.lastfirst
+				
+				, curstu.entrydate
+				, curstu.exitdate
+				
+				, curstu.grade_level
+				, curstu.schoolid
+				, curstu.lunchstatus
+				, curstu.state_excludefromreporting
+
+				, case when sec504.studentsdcid is not null then 'Section 504' end section_504
+				, case when sped.studentsdcid is not null then 'Special Education (SPED)' end special_education
+				, case when gifted.studentsdcid is not null then 'Talented and Gifted (TAG)' end talented_gifted
+				, case when upper(curstu.lunchstatus) in ('R', 'F') then 'Free and Reduced Lunch (FRL)' end frl  -- change constraint too
+				, case when esol.studentsdcid is not null then 'English Language Learner (ELL)' end ell
+			from (select * from curstu) curstu
+		    	left join (select * from gifted) gifted on curstu.dcid = gifted.studentsdcid
+				left join (select * from esol) esol on curstu.dcid = esol.studentsdcid
+				left join (select * from sped) sped on curstu.dcid = sped.studentsdcid
+				left join (select * from sec504) sec504 on curstu.dcid = sec504.studentsdcid
+			where 1=1 
+				and (sec504.studentsdcid is not null
+					or sped.studentsdcid is not null
+					or gifted.studentsdcid is not null
+					or esol.studentsdcid is not null
+					or upper(curstu.lunchstatus) in ('R', 'F')
+				)
+			order by curstu.dcid
+
+		]]>
+	</sql>
+	</query>
+
+</queries>
