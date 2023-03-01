@@ -7,7 +7,7 @@
                 const table = "students";
 				const colList = [
 					{field:"schoolid", label:"school_id"}
-					, {field:"student_id", label:"student_id"}
+					, {field:"id", label:"student_id"}
 					, {field:"student_number", label:"student_number"}
 					, {field:"state_studentnumber", label:"state_id"}
 					, {field:"last_name", label:"last_name"}
@@ -337,7 +337,6 @@
 		<column column="STUDENTS.ID">id</column>
 		<column column="STUDENTS.STUDENT_NUMBER">student_number</column>
 		<column column="STUDENTS.STUDENT_NUMBER">student_number_as_id</column>
-		<column column="STUDENTS.STUDENT_NUMBER">student_id</column>
 		<column column="STUDENTS.STATE_STUDENTNUMBER">state_studentnumber</column>
 
 		<column column="STUDENTS.LAST_NAME">last_name</column>
@@ -561,7 +560,6 @@
                 , stu.id
                 , stu.student_number
                 , stu.student_number as student_number_as_id
-                , stu.student_number as student_id
                 , stu.state_studentnumber
 
                 , stu.last_name
