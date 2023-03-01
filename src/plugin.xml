@@ -3,7 +3,7 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation='http://plugin.powerschool.pearson.com plugin.xsd'
     name="Northwest RESA - Clever Data Exports"
-    version="1.0.0"
+    version="1.0.2"
     description="PowerSchool plugin developed by Northwest GA RESA to allow districts to use Power Queries to submit files to Clever via SFTP.">
 
     <oauth></oauth>
@@ -58,7 +58,7 @@
         <field table="S_GA_STU_SPECED_X" field="STUDENTSDCID" access="ViewOnly" />
         <field table="S_GA_STU_504_C" field="STUDENTSDCID" access="ViewOnly" /> 
         
-        <field table="USERS" field="DCID" access="ViewOnly" /> 
+        <!-- <field table="USERS" field="DCID" access="ViewOnly" /> 
         <field table="USERS" field="ID" access="ViewOnly" /> 
         <field table="USERS" field="TEACHERNUMBER" access="ViewOnly" /> 
         <field table="USERS" field="FIRST_NAME" access="ViewOnly" /> 
@@ -86,7 +86,7 @@
         <field table="SECTIONS" field="EXPRESSION" access="ViewOnly" /> 
         <field table="SECTIONS" field="EXTERNAL_EXPRESSION" access="ViewOnly" /> 
         <field table="SECTIONS" field="ID" access="ViewOnly" /> 
-        <field table="SECTIONS" field="ID" access="ViewOnly" /> 
+        <field table="SECTIONS" field="ID" access="ViewOnly" />  -->
 
 
         <field table="COURSES" field="ID" access="ViewOnly" /> 
