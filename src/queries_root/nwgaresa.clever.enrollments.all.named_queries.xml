@@ -8,7 +8,7 @@
 				const colList = [
 					{field:"schoolid", label:"school_id"}
 					, {field:"sectionid", label:"section_id"}
-					, {field:"student_number", label:"student_id"}
+					, {field:"student_id", label:"student_id"}
 				];
                 function selectDefaultColumns() {
                     
