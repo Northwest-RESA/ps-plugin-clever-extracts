@@ -47,7 +47,7 @@ function selectDefaultColumns() {
         cb.click();
         if (cb.checked) {
             // look for the field in the selected columns and set the label.
-            document.querySelector("td[id=columnSelectionContainer] input[type=text][id^=label_cb_][id$=" + col.field + "]").value = col.label;
+            document.querySelector("td[id=columnSelectionContainer] input[type=text][id^=label_cb_cb_][id$=" + table + "_" + col.field + "]").value = col.label;
         }
     });
 }
