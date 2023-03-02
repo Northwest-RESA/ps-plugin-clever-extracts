@@ -134,6 +134,7 @@
                 from students stu
                     join (select * from curyear) cy on stu.entrydate between cy.firstday and cy.lastday
                 where 1=1
+					and stu.enroll_status in (0, -1)
             )
             , per_sec as (
             	-- sections compressed for a single period

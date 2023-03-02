@@ -36,6 +36,10 @@ or Cmd+Shift+P then type Run Build Task
 
 # Version History
 
+## 1.0.6
+- Fixed the teacher name field misalignment
+- Enrollments does not include students that are no longer enrolled in school
+
 ## 1.0.0
 - Added the other extract file exports for Schools, Teachers, Students, Sections, and Enrollments
 - Changed the naming convention for the PQ 

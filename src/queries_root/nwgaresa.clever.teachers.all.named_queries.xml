@@ -160,13 +160,12 @@
         <column column="LUNCH_ID" description="LUNCH_ID from the user table.">lunch_id</column>
         <column column="LOGINID" description="LOGINID from the user table.">loginid</column>
         <column column="TEACHERLOGINID" description="TEACHERLOGINID from the user table.">teacherloginid</column>
-
         <column column="PREFERREDNAME">preferred_name</column>
         <column column="PREFERREDNAME" description="Returns the PREFERREDNAME if defined otherwise the FIRST_NAME from the users table. ">preferred_first_name</column>
+        <column column="LASTFIRST" description="PowerSchool combines name as: last, first middle. ">lastfirst</column>
+        <column column="LAST_NAME">last_name</column>
         <column column="FIRST_NAME">first_name</column>
         <column column="MIDDLE_NAME">middle_name</column>
-        <column column="LAST_NAME">last_name</column>
-        <column column="LASTFIRST" description="PowerSchool combines name as: last, first middle. ">lastfirst</column>
         
         <column column="EMAIL_ADDR">email_addr</column>
         <column column="EMAIL_ADDR">email_addr_no_domain</column>
