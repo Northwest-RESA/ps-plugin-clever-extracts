@@ -36,6 +36,10 @@ or Cmd+Shift+P then type Run Build Task
 
 # Version History
 
+## 1.0.7
+- Teacher ID is now defaulting to USERS_DCID
+- Student ID is now defaulting to ID
+
 ## 1.0.6
 - Fixed the teacher name field misalignment
 - Enrollments does not include students that are no longer enrolled in school
