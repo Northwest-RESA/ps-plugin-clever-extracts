@@ -389,52 +389,52 @@
             	select distinct
             		s.schoolid
             		, cast(s.id as varchar(40)) as sectionid
-            		, nth_value(tch.teachernumber, 1) over (
+            		, nth_value(tch.users_dcid, 1) over (
                         partition by s.schoolid, s.termid, s.id, s.expression 
                         order by st.roleid, st.start_date 
                         range between unbounded preceding and unbounded following
                     ) as teacher_id
-            		, nth_value(tch.teachernumber, 2) over (
+            		, nth_value(tch.users_dcid, 2) over (
                         partition by s.schoolid, s.termid, s.id, s.expression 
                         order by st.roleid, st.start_date 
                         range between unbounded preceding and unbounded following
                     ) as teacher_2_id
-            		, nth_value(tch.teachernumber, 3) over (
+            		, nth_value(tch.users_dcid, 3) over (
                         partition by s.schoolid, s.termid, s.id, s.expression 
                         order by st.roleid, st.start_date 
                         range between unbounded preceding and unbounded following
                     ) as teacher_3_id
-            		, nth_value(tch.teachernumber, 4) over (
+            		, nth_value(tch.users_dcid, 4) over (
                         partition by s.schoolid, s.termid, s.id, s.expression 
                         order by st.roleid, st.start_date 
                         range between unbounded preceding and unbounded following
                     ) as teacher_4_id
-            		, nth_value(tch.teachernumber, 5) over (
+            		, nth_value(tch.users_dcid, 5) over (
                         partition by s.schoolid, s.termid, s.id, s.expression 
                         order by st.roleid, st.start_date 
                         range between unbounded preceding and unbounded following
                     ) as teacher_5_id
-            		, nth_value(tch.teachernumber, 6) over (
+            		, nth_value(tch.users_dcid, 6) over (
                         partition by s.schoolid, s.termid, s.id, s.expression 
                         order by st.roleid, st.start_date 
                         range between unbounded preceding and unbounded following
                     ) as teacher_6_id
-            		, nth_value(tch.teachernumber, 7) over (
+            		, nth_value(tch.users_dcid, 7) over (
                         partition by s.schoolid, s.termid, s.id, s.expression 
                         order by st.roleid, st.start_date 
                         range between unbounded preceding and unbounded following
                     ) as teacher_7_id
-            		, nth_value(tch.teachernumber, 8) over (
+            		, nth_value(tch.users_dcid, 8) over (
                         partition by s.schoolid, s.termid, s.id, s.expression 
                         order by st.roleid, st.start_date 
                         range between unbounded preceding and unbounded following
                     ) as teacher_8_id
-            		, nth_value(tch.teachernumber, 9) over (
+            		, nth_value(tch.users_dcid, 9) over (
                         partition by s.schoolid, s.termid, s.id, s.expression 
                         order by st.roleid, st.start_date 
                         range between unbounded preceding and unbounded following
                     ) as teacher_9_id
-            		, nth_value(tch.teachernumber, 10) over (
+            		, nth_value(tch.users_dcid, 10) over (
                         partition by s.schoolid, s.termid, s.id, s.expression 
                         order by st.roleid, st.start_date 
                         range between unbounded preceding and unbounded following
@@ -466,7 +466,7 @@
             	select distinct
             		s.schoolid
             		, 'per-' || first_value(s.id) over (partition by s.schoolid, s.termid, s.teacher, s.expression order by s.no_of_students desc) as sectionid
-                    , ltch.teachernumber as teacher_id
+                    , ltch.users_dcid as teacher_id
                     , '' as teacher_2_id
                     , '' as teacher_3_id
                     , '' as teacher_4_id

@@ -391,7 +391,7 @@
             	select distinct
             		s.schoolid
             		, 'per-' || first_value(s.id) over (partition by s.schoolid, s.termid, s.teacher, s.expression order by s.no_of_students desc) as sectionid
-                    , ltch.teachernumber as teacher_id
+                    , ltch.users_dcid as teacher_id
                     , '' as teacher_2_id
                     , '' as teacher_3_id
                     , '' as teacher_4_id

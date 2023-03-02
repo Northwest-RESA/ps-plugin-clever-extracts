@@ -7,7 +7,7 @@
                 const table = "users";
                 const colList = [
                     {field:"school_id",label:"school_id"},
-                    {field:"teachernumber_as_id",label:"teacher_id"},
+                    {field:"users_dcid",label:"teacher_id"},
                     {field:"teachernumber",label:"teacher_number"},
                     {field:"email_addr",label:"teacher_email"},
                     {field:"first_name",label:"first_name"},
