@@ -376,7 +376,7 @@
                     sch.schoolid
                     , ss.id as schoolstaff_id
                     , usr.teachernumber
-                    , usr.dcid as users_dcid
+                    , cast(usr.dcid as varchar(15)) as users_dcid
                     , usr.lastfirst
                     , usr.last_name
                 from schoolstaff ss
