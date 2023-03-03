@@ -249,7 +249,6 @@
                         coalesce(ss.transaction_date, to_date('01/01/1900', 'MM/DD/YYYY'))
                         , coalesce(usr.transaction_date, to_date('01/01/1900', 'MM/DD/YYYY'))
                     ) as date_last_modified
-                    , row_number() over (partition by usr.teachernumber order by usr.teachernumber, case when usr.homeschoolid = ss.schoolid then 0 else 1 end, sch.sortorder) seq
                 from schoolstaff ss
                     inner join users usr on ss.users_dcid = usr.dcid
                     inner join (select * from sch) sch on sch.schoolid = ss.schoolid 
@@ -260,7 +259,7 @@
                     --and usr.ptaccess -- 1 = Can login to the teacher portal
             )
             , sect as (
-                select distinct st.teacherid
+                select distinct sec.schoolid, st.teacherid
                 from sections sec
                     inner join terms t on sec.termid = t.id
                         and sec.schoolid = t.schoolid
@@ -268,38 +267,47 @@
                     inner join sectionteacher st on sec.id = st.sectionid
                 where 1=1
                     and sec.no_of_students > 0
-            )            
+            )
+            , tch_sec as (
+                -- Teachers matched with a section that has at least one student enrolled
+                select 
+                    tch.*
+                    , row_number() over (partition by tch.teachernumber order by tch.teachernumber, case when tch.homeschoolid = sect.schoolid then 0 else 1 end) seq
+                from (select * from tch) tch
+                    inner join (select * from sect) sect on tch.schoolstaff_id = sect.teacherid
+                where 1=1
+            )
+
             select 
-                    tch.schoolstaff_dcid
-                    , tch.schoolstaff_id
-                    , tch.users_dcid
-                    , tch.schoolid
-                    , tch.school_number
-                    , tch.state_school_id
-                    , tch.teachernumber
-                    , tch.teachernumber_as_id
-                    , tch.teachernumber_as_username
-                    , tch.teachernumber_as_password
-                    , tch.lunch_id
-                    , tch.loginid
-                    , tch.teacherloginid
-                    , tch.preferredname
-                    , tch.preferred_first_name
-                    , tch.lastfirst
-                    , tch.last_name
-                    , tch.first_name
-                    , tch.middle_name
-                    , tch.email_addr
-                    , tch.email_addr_no_domain
-                    , tch.homeroom
-                    , tch.title
-                    , tch.homeschoolid
-                    , tch.date_last_modified
-            from (select * from tch) tch
-                inner join (select * from sect) sect on tch.schoolstaff_id = sect.teacherid
+                tch_1.schoolstaff_dcid
+                , tch_1.schoolstaff_id
+                , tch_1.users_dcid
+                , tch_1.schoolid
+                , tch_1.school_number
+                , tch_1.state_school_id
+                , tch_1.teachernumber
+                , tch_1.teachernumber_as_id
+                , tch_1.teachernumber_as_username
+                , tch_1.teachernumber_as_password
+                , tch_1.lunch_id
+                , tch_1.loginid
+                , tch_1.teacherloginid
+                , tch_1.preferredname
+                , tch_1.preferred_first_name
+                , tch_1.lastfirst
+                , tch_1.last_name
+                , tch_1.first_name
+                , tch_1.middle_name
+                , tch_1.email_addr
+                , tch_1.email_addr_no_domain
+                , tch_1.homeroom
+                , tch_1.title
+                , tch_1.homeschoolid
+                , tch_1.date_last_modified
+            from (select * from tch_sec) tch_1
             where 1=1
                 -- Returns a single record per teacher affiliation with preference to the Home School of the teacher.
-                and tch.seq = 1
+                and tch_1.seq = 1
         ]]>
 	</sql>
 	</query>
