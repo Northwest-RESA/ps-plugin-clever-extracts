@@ -1,4 +1,9 @@
 #!/bin/bash
+
+#### CONSTANTS FOR BUILD CONFIGURATION AND OUTPUT
+file_name="ps_plugin_clever_extracts"     ## Use this variable to override the Plugin Name from the plugin ZIP file
+sdir="src"                          ## Source Directory of the Plugin content
+
 #### CONSTANTS FOR COLORIZING TEXT OUTPUT
 ### -------------------------------------------------------
 RESET_TEXT='\033[m'
@@ -15,33 +20,46 @@ I='  - '
 ### -------------------------------------------------------
 #echo -e "COLOR TEST: ${BOLD_RED_TEXT}Red Text ${BOLD_BLUE_TEXT}Blue Text ${BOLD_GREEN_TEXT}Green Text ${BOLD_YELLOW_TEXT}Yellow Text ${BOLD_PURPLE_TEXT}Purple Text ${BOLD_CYAN_TEXT}Cyan Text"
 echo -e "${RESET_TEXT}"
+cdir="$PWD" ## grabbing the current directory so we can reset it after the build task
+
 # -------------------------------------------------------
-### This build script is assuming that the plugin content is housed in the SRC folder.
+### This build script is assuming that all of the plugin content is housed in the ${sdir} folder.
 # -------------------------------------------------------
 echo -e "${BOLD_BLUE_TEXT}Compiling PowerSchool Plugin Installer...${RESET_TEXT}"
-sdir="src"
-cdir="$PWD"
-file_name="ps_plugin_clever_extracts"
 ### Validate the configuration of this script and the project.
+echo -e "${BOLD_GREEN_TEXT}Validating Configration...${RESET_TEXT}"
 
 if  [[ ! -d "$PWD/$sdir" && ! -L "$PWD/$sdir" ]] ; then
     echo -e "${I}${BOLD_RED_TEXT}ERROR: The $sdir folder DOESN'T exist!${RESET_TEXT}"
     echo -e "${I}Resolve by ensuring that $sdir exists or change the build script to use the expected folder name.${RESET_TEXT}"
     exit 14
-else
-    echo -e "${I}Changing to the source directory..."
-    cd "$sdir"
 fi
+echo -e "${I}Changing to the source directory..."
+cd "$sdir"
 
 if [[ ! -f "plugin.xml" ]] ; then
     echo -e "${I}${BOLD_RED_TEXT}plugin.xml was not found in the $sdir folder!${RESET_TEXT}"
     exit 15
-else 
-    echo -e "${I}Getting the version of the plugin..."
-    ## Get the version number
-    version=$(xmllint -xpath 'string(//*[local-name()="plugin"]/@version)' plugin.xml | cut -f1-3 -d.)
-    echo -e "${I}Version number found in the plugin is : ${BOLD_BLUE_TEXT}$version ${RESET_TEXT}"
-    version=${version//./-}
+fi
+
+echo -e "${I}Getting the version of the plugin..."
+version=$(xmllint -xpath 'string(//*[local-name()="plugin"]/@version)' plugin.xml | cut -f1-3 -d.)
+if [ -z "$version" ] ; then
+    echo -e "${I}${BOLD_RED_TEXT}plugin.xml did not contain a version number!${RESET_TEXT}"
+    exit 16  
+fi
+echo -e "${I}Version number found in the plugin is : ${BOLD_BLUE_TEXT}$version ${RESET_TEXT}"
+version=${version//./-} ## Make it file name friendly
+
+## Get the Plug-in Name to name the file
+pluginName=$(xmllint -xpath 'string(//*[local-name()="plugin"]/@name)' plugin.xml | cut -f1-3 -d.)
+if [ -z "$pluginName" ] ; then
+    echo -e "${I}${BOLD_RED_TEXT}plugin.xml did not contain a name!${RESET_TEXT}"
+    exit 17
+fi
+echo -e "${I}Plugin Name is : ${BOLD_BLUE_TEXT}$pluginName ${RESET_TEXT}"
+if [ -z "$file_name" ]; then 
+    file_name=${pluginName//[ .]/_}
 fi
 
 if [[ ! -d "../bin" ]] ; then
