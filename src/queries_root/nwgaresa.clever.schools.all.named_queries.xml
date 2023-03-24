@@ -95,7 +95,7 @@
                             <td>state_id</td>
                             <td>NO</td>
                             <td>String</td>
-                            <td>State school identifier. Using the GTID.</td>
+                            <td>State school identifier.</td>
                         </tr>
                         <tr>
                             <td>low_grade</td>
