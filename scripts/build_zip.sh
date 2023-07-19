@@ -4,6 +4,7 @@
 file_name="ps_plugin_clever_extracts"     ## Use this variable to override the Plugin Name from the plugin ZIP file
 sdir="src"                          ## Source Directory of the Plugin content
 
+
 #### CONSTANTS FOR COLORIZING TEXT OUTPUT
 ### -------------------------------------------------------
 RESET_TEXT='\033[m'
@@ -20,7 +21,6 @@ I='  - '
 ### -------------------------------------------------------
 #echo -e "COLOR TEST: ${BOLD_RED_TEXT}Red Text ${BOLD_BLUE_TEXT}Blue Text ${BOLD_GREEN_TEXT}Green Text ${BOLD_YELLOW_TEXT}Yellow Text ${BOLD_PURPLE_TEXT}Purple Text ${BOLD_CYAN_TEXT}Cyan Text"
 echo -e "${RESET_TEXT}"
-cdir="$PWD" ## grabbing the current directory so we can reset it after the build task
 
 # -------------------------------------------------------
 ### This build script is assuming that all of the plugin content is housed in the ${sdir} folder.
@@ -28,6 +28,7 @@ cdir="$PWD" ## grabbing the current directory so we can reset it after the build
 echo -e "${BOLD_BLUE_TEXT}Compiling PowerSchool Plugin Installer...${RESET_TEXT}"
 ### Validate the configuration of this script and the project.
 echo -e "${BOLD_GREEN_TEXT}Validating Configration...${RESET_TEXT}"
+
 
 if  [[ ! -d "$PWD/$sdir" && ! -L "$PWD/$sdir" ]] ; then
     echo -e "${I}${BOLD_RED_TEXT}ERROR: The $sdir folder DOESN'T exist!${RESET_TEXT}"
@@ -96,15 +97,10 @@ echo -e "${I}Compressing installer file as ${BOLD_GREEN_TEXT}${file_name}_v${ver
 
 zip -r "../bin/${zip_file_name}" ${filelist}
 
-## RESET THE CURRENT DIRECTORY
-cd $cdir
-
-if [[ -f "./bin/${zip_file_name}" ]] ; then
+if [[ -f "../bin/${zip_file_name}" ]] ; then
     echo -e "${I}Installer file has been created!
     ${BOLD_CYAN_TEXT}bin/${zip_file_name}
     ${RESET_TEXT}"
 else
     echo -e "${I}${BOLD_RED_TEXT}Installer file was not created! Check for errors.${RESET_TEXT}"
 fi
-
-
