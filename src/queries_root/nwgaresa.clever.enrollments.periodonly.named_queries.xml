@@ -102,16 +102,13 @@
 		<column column="STUDENTID">student_person_id</column>
 		<column column="STUDENTID">state_studentnumber</column>
 		<column column="STUDENTID">student_lunch_id</column>
+		<column column="STUDENTID">lead_teacher_id</column>
 	</columns>
 	<sql>
 		<![CDATA[
             with curyear as (
                 select t.id
-                    , t.yearid
-                    , t.lastday
-                    , t.firstday
-                    , t.abbreviation
-                    , t.name
+                    , t.yearid, t.lastday, t.firstday--, t.abbreviation, t.name
                 from terms t
                     join prefs 
                         on t.id between to_number(to_char(prefs.value) || '00') and to_number(to_char(prefs.value) || '99')
@@ -121,11 +118,7 @@
                     and t.isyearrec = 1
             )
             , sch as (
-                select 
-                    sch.school_number as schoolid
-                from schools sch
-                where 1=1 
-                    and sch.school_number <> 999999
+                select sch.school_number as schoolid from schools sch where sch.school_number <> 999999
             )
             , curstu as (
                 select stu.dcid, stu.id, stu.person_id
@@ -135,6 +128,20 @@
                     join (select * from curyear) cy on stu.entrydate between cy.firstday and cy.lastday
                 where 1=1
 					and stu.enroll_status in (0, -1)
+            )
+            , tch as (
+                select 
+                    sch.schoolid
+                    , ss.id as schoolstaff_id
+                    , usr.teachernumber
+                    , cast(usr.dcid as varchar(15)) as users_dcid
+                    , usr.lastfirst
+                    , usr.last_name
+                from schoolstaff ss
+                    inner join users usr on ss.users_dcid = usr.dcid
+                    inner join (select * from sch) sch on sch.schoolid = ss.schoolid 
+                where 1=1
+                    and ss.status = 1 -- Active Staff record
             )
             , per_sec as (
             	-- sections compressed for a single period
@@ -147,12 +154,14 @@
             		, stu.person_id as student_person_id
             		, stu.state_studentnumber 
             		, stu.lunch_id as student_lunch_id
+            		, ltch.users_dcid as lead_teacher_id
             	from sections s
 					inner join terms t on s.termid = t.id
 	                    and s.schoolid = t.schoolid
 	                inner join (select * from curyear) cy on t.yearid = cy.yearid
 	                inner join cc on cc.sectionid = s.id
 	                inner join (select * from curstu) stu on cc.studentid = stu.id
+	                inner join (select * from tch) ltch on s.teacher = ltch.schoolstaff_id
 	            where 1=1
 	            	and s.no_of_students > 0
             )
@@ -164,8 +173,10 @@
         		, student_person_id
         		, state_studentnumber 
         		, student_lunch_id
+        		, lead_teacher_id
             from per_sec
             where 1=1
+            order by schoolid, sectionid
 		]]>
 	</sql>
 	</query>

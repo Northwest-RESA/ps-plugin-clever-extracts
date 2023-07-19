@@ -275,11 +275,7 @@
         <![CDATA[
             with curyear as (
                 select t.id
-                    , t.yearid
-                    , t.lastday
-                    , t.firstday
-                    , t.abbreviation
-                    , t.name
+                    , t.yearid --, t.lastday, t.firstday, t.abbreviation, t.name
                 from terms t
                     join prefs 
                         on t.id between to_number(to_char(prefs.value) || '00') and to_number(to_char(prefs.value) || '99')
@@ -289,11 +285,7 @@
                     and t.isyearrec = 1
             )
             , sch as (
-                select 
-                    sch.school_number as schoolid
-                from schools sch
-                where 1=1 
-                    and sch.school_number <> 999999
+                select sch.school_number as schoolid from schools sch where sch.school_number <> 999999
             )
             , crs_dis as (
                 select '00' as code, 'Homeroom/advisory' as clever_subject, 'Local Course' as description from dual union all
@@ -351,14 +343,6 @@
                     , c.id
                     , c.course_number
                     , c.course_name
-                    , c.excludefromstoredgrades
-                    , c.exclude_ada
-                    , c.excludefromgpa
-                    , c.excludefromclassrank
-                    , c.excludefromhonorroll
-                    , c.credittype
-                    , c.vocational
-                    , c.transaction_date
                     , case 
                         when length(c.course_number) = 9 and substr(c.course_number, 1, 2 ) <> '00'
                             then substr(c.course_number, 1, 2) || '0' || substr(c.course_number, 3, 4) || '00'
@@ -368,7 +352,7 @@
                     , coalesce(crs_dis.clever_subject, 'other') as course_discipline
                     , crs_dis.description as course_discipline_desc
                 from courses c 
-                    inner join (select * from crs_dis) crs_dis on substr(c.course_number, 1, 2) = crs_dis.code
+                    left join (select * from crs_dis) crs_dis on substr(c.course_number, 1, 2) = crs_dis.code
                 where 1=1
             )
             , tch as (
@@ -451,6 +435,7 @@
             		, t.abbreviation as term_name
             		, t.firstday as term_start
             		, t.lastday as term_end
+                    , 1 as sec_cnt
             	from sections s
 					inner join terms t on s.termid = t.id
 	                    and s.schoolid = t.schoolid
@@ -479,7 +464,7 @@
                     , t.abbreviation || ' : ' || s.external_expression || ' : ' || ltch.last_name  || ' : All Students ' as name
             		, t.abbreviation || ' : ' || s.external_expression  as section_number
                     , first_value(s.grade_level) over (partition by s.schoolid, s.termid, s.teacher, s.expression order by s.no_of_students desc) as grade
-                    , first_value(crs.course_name) over (partition by s.schoolid, s.termid, s.teacher, s.expression order by s.no_of_students desc) as course_name
+                    , 'All Students' as course_name
             		, first_value(s.course_number) over (partition by s.schoolid, s.termid, s.teacher, s.expression order by s.no_of_students desc) as course_number
                     , first_value(crs.course_discipline_desc) over (partition by s.schoolid, s.termid, s.teacher, s.expression order by s.no_of_students desc) as course_description
                     , s.external_expression as period
@@ -487,6 +472,7 @@
                     , t.abbreviation as term_name
                     , t.firstday as term_start
                     , t.lastday as term_end
+                    , count(s.id) over (partition by s.schoolid, s.termid, s.expression, ltch.users_dcid) as sec_cnt
             	from sections s
 					inner join terms t on s.termid = t.id
 	                    and s.schoolid = t.schoolid
@@ -500,6 +486,7 @@
             	select * from sec
             	union all
             	select * from per_sec
+                where sec_cnt > 1
             )  
             select schoolid
             	, sectionid
