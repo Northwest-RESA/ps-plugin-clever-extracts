@@ -1,5 +1,5 @@
 <queries>
-	<query name="nwgaresa.clever.students_ext.all" coreTable="STUDENTS" flattened="true" tags="nwgaresa,clever,student,extension,all">
+	<query name="nwgaresa.clever.students_ext.nwea" coreTable="STUDENTS" flattened="true" tags="nwgaresa,clever,student,extension,nwea">
 	<description>
 		<![CDATA[
 			<script type="text/javascript">
@@ -50,7 +50,7 @@
  			<div class="hide">
     			<div class="rounded-box">
 					<ul>
-						<li>Student Extension Field export data for Clever.</li>
+						<li>Student Extension Fields for NWEA Program Enrollment export data for Clever.</li>
 						<li>There is a 14 day window before the first day of school and the last day of the school year.</li>
 						<li>Returns all students that were enrolled the current school year, no matter their current status.</li>
 						<li>Optional fields can be left blank or excluded from the export.</li>
