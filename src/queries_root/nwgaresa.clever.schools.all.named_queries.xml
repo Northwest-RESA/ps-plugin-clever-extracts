@@ -6,9 +6,9 @@
                 // columns can only be used once on the export
                 const table = "schools";
                 const colList = [
-                    {field:"schoolid",label:"school_id"},
+                    {field:"school_id",label:"school_id"},
                     {field:"school_name",label:"school_name"},
-                    {field:"school_number",label:"school_number"},
+                    {field:"preferered_school_number",label:"school_number"},
                     {field:"state_id",label:"state_id"},
                     {field:"low_grade",label:"low_grade"},
                     {field:"high_grade",label:"high_grade"},
@@ -54,6 +54,10 @@
                 }
             </script>
             <h2 id="specHeader" class="toggle collapsed">Clever schools.csv Specification</h2>
+            <div> Clever&#39;s new plugin will be using the <tt>ID</tt> field from the schools table as they school key. We changed our defaults to match that logic. <br>
+                The <tt>preferred_school_number</tt> field is the Alternate School Number, if defined for the school.<br>
+                This export only returns schools (excluding Graduated School) that have a school year defined for the current school year.
+            </div>
             <div class="hide">
                 <div class="rounded-box">
                 <ul>
@@ -163,9 +167,9 @@
 	<columns>
         <column column="DCID" description="The DCID field from the schools table.">school_dcid</column>
         <column column="ID" description="The ID field from the schools table.">school_id</column>
-        <column column="SCHOOL_NUMBER" description="The SCHOOL_NUMBER field from the schools table.">schoolid</column>
+        <column column="SCHOOL_NUMBER" description="The SCHOOL_NUMBER field from the schools table.">school_number</column>
         <column column="SCHOOL_NUMBER" description="The ALTERNATE_SCHOOL_NUMBER field from the schools table.">alternate_school_number</column>
-        <column column="SCHOOL_NUMBER" description="School Number or Alternate School Number, if specified.">school_number</column>
+        <column column="SCHOOL_NUMBER" description="School Number or Alternate School Number, if specified.">preferered_school_number</column>
 		<column column="SCHOOL_NUMBER" description="District ID prepended to the school_number">state_id</column>
         <column column="NAME">school_name</column>
 		<column column="ABBREVIATION" description="Abbreviation field from the schools table.">school_shortname</column>
@@ -182,16 +186,16 @@
 		<column column="SCHOOLPHONE" description="Numerical characters found in the SCHOOLPHONE field in the schools table.">schoolphone</column>
 		<column column="STATE_EXCLUDEFROMREPORTING" description="1 indicates this school is not reporting on state reports.">state_excludefromreporting</column>
         <column column="TRANSACTION_DATE" description="Date and time of the last edit performed on the school table record.">date_last_modified</column>
+        <column column="ID" description="Blank field">blank_value_1</column>
+        <column column="ID" description="Blank field">blank_value_2</column>
+        <column column="ID" description="Blank field">blank_value_3</column>
+        <column column="ID" description="Blank field">blank_value_4</column>
 	</columns>
 	<sql>
         <![CDATA[
             with curyear as (
                 select t.id
-                    , t.yearid
-                    , t.lastday
-                    , t.firstday
-                    , t.abbreviation
-                    , t.name
+                    , t.yearid, t.lastday, t.firstday--, t.abbreviation, t.name
                 from terms t
                     join prefs 
                         on t.id between to_number(to_char(prefs.value) || '00') and to_number(to_char(prefs.value) || '99')
@@ -268,6 +272,10 @@
                 , sch.schoolphone
                 , sch.state_excludefromreporting
                 , sch.date_last_modified
+                , '' as blank_value_1
+                , '' as blank_value_2
+                , '' as blank_value_3
+                , '' as blank_value_4
             from (select * from sch) sch
                 inner join terms t on sch.schoolid = t.schoolid
                     and t.isyearrec = 1
