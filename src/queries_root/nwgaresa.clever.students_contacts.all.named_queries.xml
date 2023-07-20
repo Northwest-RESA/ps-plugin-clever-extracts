@@ -1,33 +1,33 @@
 <queries>
-	<query name="nwgaresa.clever.students_contacts.all" coreTable="STUDENTS" flattened="true" tags="nwgaresa,clever,student,contacts,all">
+	<query name="nwgaresa.clever.students_contacts.all" coreTable="STUDENTS" flattened="true" tags="nwgaresa,clever,student,all,contacts">
 	<description>
 		<![CDATA[
 			<script type="text/javascript">
                 // columns can only be used once on the export
                 const table = "students";
 				const colList = [
-					{field:"schoolid", label:"school_id"}
-					, {field:"id", label:"student_id"}
+					{field:"school_id", label:"school_id"}
+					, {field:"student_id", label:"student_id"}
 					, {field:"student_number", label:"student_number"}
-					, {field:"state_studentnumber", label:"state_id"}
+					, {field:"state_id", label:"state_id"}
 					, {field:"last_name", label:"last_name"}
 					, {field:"middle_name", label:"middle_name"}
 					, {field:"first_name", label:"first_name"}
 					, {field:"grade", label:"grade"}
 					, {field:"gender", label:"gender"}
-					, {field:"sched_yearofgraduation", label:"graduation_year"}
+					, {field:"graduation_year", label:"graduation_year"}
 					, {field:"dob", label:"dob"}
 					, {field:"race", label:"race"}
 					, {field:"hispanic_latino", label:"hispanic_latino"}
 					, {field:"home_language", label:"home_language"}
 					, {field:"ell_status", label:"ell_status"}
-					, {field:"lunchstatus", label:"frl_status"}
+					, {field:"frl_status", label:"frl_status"}
 					, {field:"iep_status", label:"iep_status"}
 					, {field:"student_street", label:"student_street"}
 					, {field:"student_city", label:"student_city"}
 					, {field:"student_state", label:"student_state"}
 					, {field:"student_zip", label:"student_zip"}
-					, {field:"person_student_email", label:"student_email"}
+					, {field:"student_contact_email", label:"student_email"}
 					, {field:"contact_relationship", label:"contact_relationship"}
 					, {field:"contact_type", label:"contact_type"}
 					, {field:"contact_name", label:"contact_name"}
@@ -77,10 +77,9 @@
 						<ul>
 							<li>Student export data for Clever.</li>
 							<li><b>Student Contacts are also exported with this PowerQuery.<sup>4</sup></b></li>
-                            <li>There is a 14 day window before the first day of school and the last day of the school year.</li>
 							<li>Returns all students that were enrolled the current school year, no matter their current status.</li>
 							<li>Optional fields can be left blank or excluded from the export.</li>
-							<li><i>This PowerQuery pulls withdrawn students.</i></li>
+							<li><i>This PowerQuery pulls withdrawn students and contacts.</i></li>
 						</ul>
 					</div>
 					<table align="center" border="0" cellpadding="4" cellspacing="0" class="grid">
@@ -331,47 +330,59 @@
 		]]>
     </description>
 	<columns>
-		<column column="STUDENTS.SCHOOLID">schoolid</column>
-		<column column="STUDENTS.DCID">dcid</column>
-		<column column="STUDENTS.ID">id</column>
+		<column column="STUDENTS.SCHOOLID">school_id</column>
+		<column column="STUDENTS.ID">student_id</column>
 		<column column="STUDENTS.STUDENT_NUMBER">student_number</column>
-		<column column="STUDENTS.STUDENT_NUMBER">student_number_as_id</column>
-		<column column="STUDENTS.STATE_STUDENTNUMBER">state_studentnumber</column>
+		<column column="STUDENTS.STATE_STUDENTNUMBER">state_id</column>
 
 		<column column="STUDENTS.LAST_NAME">last_name</column>
-		<column column="STUDENTS.FIRST_NAME">first_name</column>
 		<column column="STUDENTS.MIDDLE_NAME">middle_name</column>
-		<column column="STUDENTS.LASTFIRST">lastfirst</column>
-
-		<column column="STUDENTS.GRADE_LEVEL">grade_level</column>
+		<column column="STUDENTS.FIRST_NAME">first_name</column>
+		
 		<column column="STUDENTS.GRADE_LEVEL">grade</column>
-
 		<column column="STUDENTS.GENDER">gender</column>
-		<column column="STUDENTS.CLASSOF">classof</column>
+
+		<column column="STUDENTS.CLASSOF">graduation_year</column>
 		<column column="STUDENTS.DOB">dob</column>
+
 		<column column="STUDENTS.ETHNICITY">race</column>
 		<column column="STUDENTS.FEDETHNICITY">hispanic_latino</column>
+
 		<column column="STUDENTCOREFIELDS.PRIMARYLANGUAGE">home_language</column>
 
-		<column column="STUDENTS.TRANSACTION_DATE">date_last_modified</column>
 		<column column="STUDENTS.LUNCHSTATUS">ell_status</column>
-		<column column="STUDENTS.LUNCHSTATUS">lunchstatus</column>
+		<column column="STUDENTS.LUNCHSTATUS">frl_status</column>
 		<column column="STUDENTS.LUNCHSTATUS">iep_status</column>
+
 		<column column="STUDENTS.STREET">student_street</column>
 		<column column="STUDENTS.CITY">student_city</column>
 		<column column="STUDENTS.STATE">student_state</column>
 		<column column="STUDENTS.ZIP">student_zip</column>
 
-		<column column="STUDENTS.ZIP">psm_student_email</column>
-		<column column="STUDENTS.ZIP">person_student_email</column>
+		<column column="STUDENTS.ZIP">student_psm_email</column>
+		<column column="STUDENTS.ZIP">student_contact_email</column>
+
+		<column column="STUDENTCOREFIELDS.PRIMARYLANGUAGE">home_language_code</column>
 		
+		<column column="STUDENTS.LASTFIRST">lastfirst</column>
+		<column column="STUDENTS.GRADE_LEVEL">grade_level</column>
 		<column column="STUDENTS.ENTRYDATE">entrydate</column>
 		<column column="STUDENTS.EXITDATE">exitdate</column>
 		<column column="STUDENTS.STATE_EXCLUDEFROMREPORTING">state_excludefromreporting</column>
 		<column column="STUDENTS.WEB_ID">web_id</column>
 		<column column="STUDENTS.LUNCH_ID">lunch_id</column>
 		<column column="STUDENTS.HOME_ROOM">home_room</column>
-		<column column="STUDENTS.SCHED_YEAROFGRADUATION">sched_yearofgraduation</column>
+
+
+		<column column="STUDENTS.STUDENT_NUMBER">student_number_as_id</column>
+
+		<column column="STUDENTS.ENROLL_STATUS">active</column>
+
+		<column column="ID" description="Blank field">blank_value_1</column>
+        <column column="ID" description="Blank field">blank_value_2</column>
+        <column column="ID" description="Blank field">blank_value_3</column>
+        <column column="ID" description="Blank field">blank_value_4</column>
+        <column column="ID" description="Blank field">blank_value_5</column>
 
 		<column column="STUDENTS.CITY">contact_relationship</column>
 		<column column="STUDENTS.CITY">contact_type</column>
@@ -386,17 +397,14 @@
 		<column column="STUDENTS.CITY">contact_schoolpickupflg</column>
 		<column column="STUDENTS.CITY">contact_receivesmailflg</column>
 
+		<column column="STUDENTS.TRANSACTION_DATE">date_last_modified</column>
+
 	</columns>
 	<sql>
 		<![CDATA[
-            -- buffering with a 14 window before the first day of school and the last day of the school year
             with curyear as (
                 select t.id
-                    , t.yearid
-                    , t.lastday
-                    , t.firstday
-                    , t.abbreviation
-                    , t.name
+                    , t.yearid, t.lastday, t.firstday--, t.abbreviation, t.name
                 from terms t
                     join prefs 
                         on t.id between to_number(to_char(prefs.value) || '00') and to_number(to_char(prefs.value) || '99')
@@ -405,27 +413,8 @@
                     and t.schoolid = 0 
                     and t.isyearrec = 1
             )
-            , district as (
-                select district_id from (
-                    select value as district_id, row_number() over (order by null) rn from prefs where name = 'districtnumber'
-                ) x where x.rn = 1
-            )
             , sch as (
-                select 
-                    sch.dcid
-                    , sch.id
-                    , sch.school_number as schoolid
-                    , sch.alternate_school_number
-                    , case when coalesce(sch.alternate_school_number, 0) <> 0 then sch.alternate_school_number else sch.school_number end as school_number
-                    , lpad(d.district_id, 3, '0') 
-                        || lpad(
-                            case when coalesce(sch.alternate_school_number, 0) <> 0 then sch.alternate_school_number else sch.school_number end     
-                            , 4, '0') as state_id
-                    , sch.name 
-                    , sch.abbreviation
-                from schools sch, (select * from district) d
-                where 1=1 
-                    and sch.school_number <> 999999
+                select sch.id, sch.school_number as schoolid from schools sch where sch.school_number <> 999999
             ) 
             , curstu as (
                 select stu.dcid, stu.id, stu.person_id
@@ -438,9 +427,9 @@
                     , stu.entrydate, stu.exitdate, stu.state_excludefromreporting
                     , stu.web_id, stu.lunch_id, stu.sched_yearofgraduation
                     , stu.home_room
+                    , case when stu.enroll_status in (-1, 0) then 1 else 0 end as active
                 from students stu
                     join (select * from curyear) cy on stu.entrydate between cy.firstday and cy.lastday
-                where 1=1
             ) 
             , stu_psmsc as (
                 select
@@ -477,8 +466,10 @@
                 where 1=1
                     and upper(sped.all_iep) = 'Y'  -- excluding Service plan only students
             )
-            
-            , scd as (
+            , pl as (
+            	select * from ps_common_code where ps_group = 'GA_STU_GI' and category = 'PrimaryLanguage' --and sysdate between nvl(effective_startdate, sysdate) and nvl(effective_enddate, sysdate)
+            )
+           , scd as (
                 -- student contact detail
                 select 
                     sca.studentdcid
@@ -551,43 +542,37 @@
                     )
                      */
             )
-            
             select
-                sch.schoolid
-                , stu.dcid
-                , stu.id
-                , stu.student_number
-                , stu.student_number as student_number_as_id
-                , stu.state_studentnumber
-
+            	sch.id as school_id
+            	, stu.id as student_id
+            	, stu.student_number
+                , stu.state_studentnumber as state_id
+            	
                 , stu.last_name
-                , stu.first_name
                 , stu.middle_name
-                , stu.lastfirst
-                
-                , stu.grade_level
+                , stu.first_name
+            	
                 , case 
                         when stu.grade_level <= -1 then 'Prekindergarten'
                         when stu.grade_level = 0 then 'Kindergarten'
                         when stu.grade_level > 12 then 'Postgraduate'
                         else cast(stu.grade_level as varchar(2)) 
                     end as grade
-                    
                 , upper(stu.gender) as gender
-                , stu.classof
+                
+                , greatest(stu.sched_yearofgraduation, stu.classof) as graduation_year
+                
                 , to_char(stu.dob, 'MM/DD/YYYY') as dob
+                
                 , case upper(stu.Ethnicity)
                         when 'S' then 'A'
                         else upper(stu.Ethnicity)
                     end as race
                 , case stu.FedEthnicity when 1 then 'Y' else 'N' end as hispanic_latino    
-                , stuc.primarylanguage as home_language -- this should get filtered for the supported languages...    
                 
-				, greatest(
-                    coalesce(stu.transaction_date, to_date('01/01/1900', 'MM/DD/YYYY'))
-                    , coalesce(stu_pea.lastupdated, to_date('01/01/1900', 'MM/DD/YYYY'))
-                    , coalesce(stu_psmsc.lastupdated, to_date('01/01/1900', 'MM/DD/YYYY'))
-                ) as date_last_modified
+                /* Get Home Language from CODE*/
+                , substr(pl_cs.description, length(pl_cs.code)+4, 250) as home_language
+                
                 , case when esol.studentsdcid is not null then 'Y' else 'N' end as ell_status
                 , case upper(stu.lunchstatus)
                     when 'P' then 'N' 
@@ -596,22 +581,37 @@
                     when 'E' then 'F'
                     else upper(stu.lunchstatus) end as frl_status
                 , case when sped.studentsdcid is not null then 'Y' else 'N' end as iep_status
-                , stu.street
-                , stu.city
-                , upper(substr(stu.state, 1, 2)) as state
-                , regexp_replace(stu.zip, '[^0-9]+', '') as zip
-
-                , stu_psmsc.psm_studentcontact_email
-                , stu_pea.contact_emailaddress
-
+                
+                , stu.street as student_street
+                , stu.city as student_city
+                , upper(substr(stu.state, 1, 2)) as student_state
+                , regexp_replace(stu.zip, '[^0-9]+', '') as student_zip
+                
+                /* These email address should be the same */
+                , stu_psmsc.psm_studentcontact_email as student_psm_email
+                , stu_pea.contact_emailaddress as student_contact_email
+                
+                /* Optional Student Fields */
+                , stuc.primarylanguage as home_language_code
+                , stu.lastfirst
+                , stu.grade_level                    
                 , stu.entrydate
                 , stu.exitdate
                 , stu.state_excludefromreporting
                 , stu.web_id
                 , stu.lunch_id
                 , stu.home_room
-                , stu.sched_yearofgraduation
-
+                
+                /* Extra fields for filters and defaults */
+                , stu.student_number as student_number_as_id
+                , stu.active -- 1 = Enrolled or Pre-registered
+                
+                , '' as blank_value_1
+                , '' as blank_value_2
+                , '' as blank_value_3
+                , '' as blank_value_4
+                , '' as blank_value_5
+                
                 , scd.relationship_type as contact_relationship
                 , case 
                     when scd.isemergency = 1 then 'Emergency'
@@ -628,11 +628,19 @@
                 , scd.liveswithflg
                 , scd.schoolpickupflg
                 , scd.receivesmailflg
+                
+                , greatest(
+                    coalesce(stu.transaction_date, to_date('01/01/1900', 'MM/DD/YYYY'))
+                    , coalesce(stu_pea.lastupdated, to_date('01/01/1900', 'MM/DD/YYYY'))
+                    , coalesce(stu_psmsc.lastupdated, to_date('01/01/1900', 'MM/DD/YYYY'))
+                ) as date_last_modified
+                
             from (select * from curstu) stu 
                 left join (select * from stu_psmsc) stu_psmsc on stu_psmsc.studentsdcid = stu.dcid
                 left join (select * from stu_pea) stu_pea on stu_pea.personid = stu.person_id
                 inner join (select * from sch) sch on stu.schoolid = sch.schoolid
                 left join studentcorefields stuc on stu.dcid = stuc.studentsdcid
+                left join (select * from pl) pl_cs on pl_cs.code = stuc.primarylanguage
                 left join (select * from esol) esol on stu.dcid = esol.studentsdcid
                 left join (select * from sped) sped on stu.dcid = sped.studentsdcid
                 left join (select * from scd) scd on stu.dcid = scd.studentdcid
