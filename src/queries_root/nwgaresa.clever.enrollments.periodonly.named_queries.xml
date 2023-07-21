@@ -119,8 +119,6 @@
                     , stu.lunch_id
                 from students stu
                     join (select * from curyear) cy on stu.entrydate between cy.firstday and cy.lastday
-                where 1=1
-					and stu.enroll_status in (0, -1)
             )
             , tch as (
                 select 
@@ -142,12 +140,7 @@
             		sch.id as school_id
 					, -1 * first_value(s.id) over (partition by s.schoolid, s.termid, s.teacher, s.expression order by s.no_of_students desc) as section_id
             		, stu.id as student_id
-            		, stu.dcid as student_dcid
-            		, stu.student_number 
-            		, stu.person_id as student_person_id
-            		, stu.state_studentnumber 
-            		, stu.lunch_id as student_lunch_id
-            		, ltch.users_dcid as lead_teacher_id
+                    , count(s.id) over (partition by s.schoolid, s.termid, s.expression, ltch.users_dcid) as sec_cnt
             	from sections s
 					inner join terms t on s.termid = t.id
 	                    and s.schoolid = t.schoolid
