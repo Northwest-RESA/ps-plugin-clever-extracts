@@ -176,7 +176,7 @@
             select school_id
             	, section_id
         		, student_id
-            from both
+            from (select * from both) final
             where 1=1
             order by school_id, section_id
 			

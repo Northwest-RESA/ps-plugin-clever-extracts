@@ -525,7 +525,7 @@
                 , '' as blank_value_3
                 , '' as blank_value_4
                 , '' as blank_value_5
-            from both
+            from (select * from both) final
             where 1=1
             order by school_id, term_name, teacher_id, period
         ]]>

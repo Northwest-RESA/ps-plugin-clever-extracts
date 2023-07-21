@@ -444,7 +444,7 @@
                     and upper(sped.all_iep) = 'Y'  -- excluding Service plan only students
             )
             , pl as (
-            	select * from ps_common_code where ps_group = 'GA_STU_GI' and category = 'PrimaryLanguage' --and sysdate between nvl(effective_startdate, sysdate) and nvl(effective_enddate, sysdate)
+            	select code, description from ps_common_code where ps_group = 'GA_STU_GI' and category = 'PrimaryLanguage' --and sysdate between nvl(effective_startdate, sysdate) and nvl(effective_enddate, sysdate)
             )
 
             select
