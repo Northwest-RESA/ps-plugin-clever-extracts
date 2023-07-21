@@ -394,7 +394,7 @@
                     , t.abbreviation || ' : ' || s.external_expression || ' : ' || ltch.last_name  || ' : All Students ' as name
             		, t.abbreviation || ' : ' || s.external_expression  as section_number
                     , first_value(s.grade_level) over (partition by s.schoolid, s.termid, s.teacher, s.expression order by s.no_of_students desc) as grade
-                    , 'All Students' as course_name
+                    , 'All Students : ' || t.abbreviation || ' : ' || s.external_expression as course_name
             		, first_value(s.course_number) over (partition by s.schoolid, s.termid, s.teacher, s.expression order by s.no_of_students desc) as course_number
                     , first_value(crs.course_discipline_desc) over (partition by s.schoolid, s.termid, s.teacher, s.expression order by s.no_of_students desc) as course_description
                     , s.external_expression as period
