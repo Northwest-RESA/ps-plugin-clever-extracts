@@ -269,6 +269,13 @@
         <column column="TERMS.ABBREVIATION" description="">term_name</column>
         <column column="TERMS.FIRSTDAY" description="">term_start</column>
         <column column="TERMS.LASTDAY" description="">term_end</column>
+        
+        <column column="COURSE_NUMBER" description="Blank field">blank_value_1</column>
+        <column column="COURSE_NUMBER" description="Blank field">blank_value_2</column>
+        <column column="COURSE_NUMBER" description="Blank field">blank_value_3</column>
+        <column column="COURSE_NUMBER" description="Blank field">blank_value_4</column>
+        <column column="COURSE_NUMBER" description="Blank field">blank_value_5</column>
+
         <!-- <column column="TRANSACTION_DATE" description="Date and time of the last edit performed on the section record.">date_last_modified</column> -->
 	</columns>
 	<sql>
@@ -429,6 +436,11 @@
             	, term_name
             	, term_start
             	, term_end
+                , '' as blank_value_1
+                , '' as blank_value_2
+                , '' as blank_value_3
+                , '' as blank_value_4
+                , '' as blank_value_5
             from per_sec
             where 1=1
             order by school_id, term_name, teacher_id, period
