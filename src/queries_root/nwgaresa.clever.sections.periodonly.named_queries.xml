@@ -64,12 +64,13 @@
             </script>
             <p><b>Pair this export with the &#39;period-only&#39; enrollment export.</b></p>
             <h2 id="specHeader" class="toggle collapsed">Clever sections.csv Specification</h2>
+            <div> Generates a single section for all students enrolled in sections for the same period for a lead teacher. </div>
             <div class="hide">
                 <div class="rounded-box">
                 <ul>
                     <li>Section export data for Clever.</li>
                     <li>Returns a single compressed section record for all sections within a School, Term, Lead Teacher, and Expression that has at least one student enrolled for the current school year.</li>
-                    <li>No Co-Teachers are returned with this export.</li>
+                    <li><b>No Co-Teachers are returned with this export.</b></li>
                     <li>Optional fields can be left blank or excluded from the export.</li>
                 </ul>
                 </div>
