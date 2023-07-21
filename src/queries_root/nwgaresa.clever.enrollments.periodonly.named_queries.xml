@@ -6,8 +6,8 @@
                 // columns can only be used once on the export
                 const table = "cc";
 				const colList = [
-					{field:"schoolid", label:"school_id"}
-					, {field:"sectionid", label:"section_id"}
+					{field:"school_id", label:"school_id"}
+					, {field:"section_id", label:"section_id"}
 					, {field:"student_id", label:"student_id"}
 				];
                 function selectDefaultColumns() {
@@ -93,15 +93,9 @@
 		]]>
     </description>
 	<columns>
-		<column column="SCHOOLID">schoolid</column>
-		<column column="SECTIONID">sectionid</column>
+		<column column="SCHOOLID">school_id</column>
+		<column column="SECTIONID">section_id</column>
 		<column column="STUDENTID">student_id</column>
-		<column column="STUDENTID">student_dcid</column>
-		<column column="STUDENTID">student_number</column>
-		<column column="STUDENTID">student_person_id</column>
-		<column column="STUDENTID">state_studentnumber</column>
-		<column column="STUDENTID">student_lunch_id</column>
-		<column column="STUDENTID">lead_teacher_id</column>
 	</columns>
 	<sql>
 		<![CDATA[
@@ -117,7 +111,7 @@
                     and t.isyearrec = 1
             )
             , sch as (
-                select sch.school_number as schoolid from schools sch where sch.school_number <> 999999
+                select sch.id, sch.school_number as schoolid from schools sch where sch.school_number <> 999999
             )
             , curstu as (
                 select stu.dcid, stu.id, stu.person_id
@@ -141,12 +135,12 @@
                     inner join (select * from sch) sch on sch.schoolid = ss.schoolid 
                 where 1=1
                     and ss.status = 1 -- Active Staff record
-            )
+            ) 
             , per_sec as (
             	-- sections compressed for a single period
             	select distinct
-            		s.schoolid
-            		, 'per-' || first_value(s.id) over (partition by s.schoolid, s.termid, s.teacher, s.expression order by s.no_of_students desc) as sectionid
+            		sch.id as school_id
+					, -1 * first_value(s.id) over (partition by s.schoolid, s.termid, s.teacher, s.expression order by s.no_of_students desc) as section_id
             		, stu.id as student_id
             		, stu.dcid as student_dcid
             		, stu.student_number 
@@ -157,25 +151,20 @@
             	from sections s
 					inner join terms t on s.termid = t.id
 	                    and s.schoolid = t.schoolid
-	                inner join (select * from curyear) cy on t.yearid = cy.yearid
+                    inner join (select * from sch) sch on s.schoolid = sch.schoolid
+					inner join (select * from curyear) cy on t.yearid = cy.yearid
 	                inner join cc on cc.sectionid = s.id
 	                inner join (select * from curstu) stu on cc.studentid = stu.id
 	                inner join (select * from tch) ltch on s.teacher = ltch.schoolstaff_id
 	            where 1=1
 	            	and s.no_of_students > 0
             )
-            select schoolid
-            	, sectionid
+            select school_id
+            	, section_id
         		, student_id
-        		, student_dcid
-        		, student_number 
-        		, student_person_id
-        		, state_studentnumber 
-        		, student_lunch_id
-        		, lead_teacher_id
             from per_sec
             where 1=1
-            order by schoolid, sectionid
+            order by school_id, section_id
 		]]>
 	</sql>
 	</query>
