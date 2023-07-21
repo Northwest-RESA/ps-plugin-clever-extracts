@@ -49,9 +49,7 @@
     			<div class="rounded-box">
 					<ul>
 						<li>Student Section Enrollment export data for Clever.</li>
-						<li>There is a 14 day window before the first day of school and the last day of the school year.</li>
-						<li>Returns all students that are currently enrolled or pre-registered in the current school year.</li>
-						<li>There are no optional fields for this export. Match the student_id to the field that you exported with students.csv.</li>
+						<li>There are no optional fields for this export.</li>
 					</ul>
     			</div>
     			<table align="center" border="0" cellpadding="4" cellspacing="0" class="grid">
