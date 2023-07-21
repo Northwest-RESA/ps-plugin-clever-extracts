@@ -63,6 +63,9 @@
                 }
             </script>
             <h2 id="specHeader" class="toggle collapsed">Clever sections.csv Specification</h2>
+            <div>All scheduled sections are returned if the section has at least one enrolled student. <br>
+            If a lead teacher has more than one section defined in the same period, a new section will be generated that contains all of the students enrolled for all sections in the period.
+            </div>
             <div class="hide">
                 <div class="rounded-box">
                 <ul>
@@ -244,22 +247,22 @@
         ]]>
     </description>
 	<columns>
-        <column column="SCHOOLS.SCHOOL_NUMBER" description="The school number where the section is scheduled.">school_id</column>
-        <column column="ID" description="The ID field from the sections table.">section_id</column>
-        <column column="USERS.TEACHERNUMBER" description="The teachernumber field from the users table.">teacher_id</column>
-        <column column="USERS.TEACHERNUMBER" description="The teachernumber field from the users table.">teacher_2_id</column>
-        <column column="USERS.TEACHERNUMBER" description="The teachernumber field from the users table.">teacher_3_id</column>
-        <column column="USERS.TEACHERNUMBER" description="The teachernumber field from the users table.">teacher_4_id</column>
-        <column column="USERS.TEACHERNUMBER" description="The teachernumber field from the users table.">teacher_5_id</column>
-        <column column="USERS.TEACHERNUMBER" description="The teachernumber field from the users table.">teacher_6_id</column>
-        <column column="USERS.TEACHERNUMBER" description="The teachernumber field from the users table.">teacher_7_id</column>
-        <column column="USERS.TEACHERNUMBER" description="The teachernumber field from the users table.">teacher_8_id</column>
-        <column column="USERS.TEACHERNUMBER" description="The teachernumber field from the users table.">teacher_9_id</column>
-        <column column="USERS.TEACHERNUMBER" description="The teachernumber field from the users table.">teacher_10_id</column>
+        <column column="SCHOOLS.SCHOOL_NUMBER" description="Matches the identifier for schools in `nwgaresa.clever.schools.all`.">school_id</column>
+        <column column="ID" description="The ID field from the sections table. Negative value for a compressed period section.">section_id</column>
+        <column column="USERS.TEACHERNUMBER" description="The users_dcid field from the users table for the referenced teacher.">teacher_id</column>
+        <column column="USERS.TEACHERNUMBER" description="The users_dcid field from the users table for the referenced teacher.">teacher_2_id</column>
+        <column column="USERS.TEACHERNUMBER" description="The users_dcid field from the users table for the referenced teacher.">teacher_3_id</column>
+        <column column="USERS.TEACHERNUMBER" description="The users_dcid field from the users table for the referenced teacher.">teacher_4_id</column>
+        <column column="USERS.TEACHERNUMBER" description="The users_dcid field from the users table for the referenced teacher.">teacher_5_id</column>
+        <column column="USERS.TEACHERNUMBER" description="The users_dcid field from the users table for the referenced teacher.">teacher_6_id</column>
+        <column column="USERS.TEACHERNUMBER" description="The users_dcid field from the users table for the referenced teacher.">teacher_7_id</column>
+        <column column="USERS.TEACHERNUMBER" description="The users_dcid field from the users table for the referenced teacher.">teacher_8_id</column>
+        <column column="USERS.TEACHERNUMBER" description="The users_dcid field from the users table for the referenced teacher.">teacher_9_id</column>
+        <column column="USERS.TEACHERNUMBER" description="The users_dcid field from the users table for the referenced teacher.">teacher_10_id</column>
         <column column="COURSE_NUMBER" description="Compiled name for the section.">section_name</column>
         <column column="SECTION_NUMBER" description="Number assigned to the section.">section_number</column>
-        <column column="GRADE_LEVEL" description="blank value">grade</column>
-        <column column="COURSES.COURSE_NAME" description="">course_name</column>
+        <column column="GRADE_LEVEL" description="">grade</column>
+        <column column="COURSES.COURSE_NAME" description="All Students if compressed period section">course_name</column>
         <column column="COURSE_NUMBER" description="">course_number</column>
         <column column="COURSES.COURSE_NAME" description="Currently providing the description of the subject.">course_description</column>
         <column column="EXTERNAL_EXPRESSION" description="">external_expression</column>
@@ -267,14 +270,19 @@
         <column column="TERMS.ABBREVIATION" description="">term_name</column>
         <column column="TERMS.FIRSTDAY" description="">term_start</column>
         <column column="TERMS.LASTDAY" description="">term_end</column>
- 
+        
+        <column column="COURSE_NUMBER" description="Blank field">blank_value_1</column>
+        <column column="COURSE_NUMBER" description="Blank field">blank_value_2</column>
+        <column column="COURSE_NUMBER" description="Blank field">blank_value_3</column>
+        <column column="COURSE_NUMBER" description="Blank field">blank_value_4</column>
+        <column column="COURSE_NUMBER" description="Blank field">blank_value_5</column>
         <!-- <column column="TRANSACTION_DATE" description="Date and time of the last edit performed on the section record.">date_last_modified</column> -->
 	</columns>
 	<sql>
         <![CDATA[
             with curyear as (
                 select t.id
-                    , t.yearid --, t.lastday, t.firstday, t.abbreviation, t.name
+                    , t.yearid, t.lastday, t.firstday--, t.abbreviation, t.name
                 from terms t
                     join prefs 
                         on t.id between to_number(to_char(prefs.value) || '00') and to_number(to_char(prefs.value) || '99')
@@ -284,8 +292,22 @@
                     and t.isyearrec = 1
             )
             , sch as (
-                select sch.school_number as schoolid from schools sch where sch.school_number <> 999999
+                select sch.id, sch.school_number as schoolid from schools sch where sch.school_number <> 999999
             )
+            , tch as (
+                select 
+                    sch.schoolid
+                    , ss.id as schoolstaff_id
+                    , usr.teachernumber
+                    , cast(usr.dcid as varchar(15)) as users_dcid
+                    , usr.lastfirst
+                    , usr.last_name
+                from schoolstaff ss
+                    inner join users usr on ss.users_dcid = usr.dcid
+                    inner join (select * from sch) sch on sch.schoolid = ss.schoolid 
+                where 1=1
+                    and ss.status = 1 -- Active Staff record
+            ) 
             , crs_dis as (
                 select '00' as code, 'Homeroom/advisory' as clever_subject, 'Local Course' as description from dual union all
                 select '17' as code, 'PE and health' as clever_subject, 'HEALTH' as description from dual union all
@@ -354,24 +376,47 @@
                     left join (select * from crs_dis) crs_dis on substr(c.course_number, 1, 2) = crs_dis.code
                 where 1=1
             )
-            , tch as (
-                select 
-                    sch.schoolid
-                    , ss.id as schoolstaff_id
-                    , usr.teachernumber
-                    , cast(usr.dcid as varchar(15)) as users_dcid
-                    , usr.lastfirst
-                    , usr.last_name
-                from schoolstaff ss
-                    inner join users usr on ss.users_dcid = usr.dcid
-                    inner join (select * from sch) sch on sch.schoolid = ss.schoolid 
-                where 1=1
-                    and ss.status = 1 -- Active Staff record
+            , per_sec as (
+            	-- sections compressed for a single period
+            	select distinct
+            		sch.id as school_id
+                    , -1 * first_value(s.id) over (partition by s.schoolid, s.termid, s.teacher, s.expression order by s.no_of_students desc) as section_id
+                    , ltch.users_dcid as teacher_id
+                    , '' as teacher_2_id
+                    , '' as teacher_3_id
+                    , '' as teacher_4_id
+                    , '' as teacher_5_id
+                    , '' as teacher_6_id
+                    , '' as teacher_7_id
+                    , '' as teacher_8_id
+                    , '' as teacher_9_id
+                    , '' as teacher_10_id
+                    , t.abbreviation || ' : ' || s.external_expression || ' : ' || ltch.last_name  || ' : All Students ' as name
+            		, t.abbreviation || ' : ' || s.external_expression  as section_number
+                    , first_value(s.grade_level) over (partition by s.schoolid, s.termid, s.teacher, s.expression order by s.no_of_students desc) as grade
+                    , 'All Students' as course_name
+            		, first_value(s.course_number) over (partition by s.schoolid, s.termid, s.teacher, s.expression order by s.no_of_students desc) as course_number
+                    , first_value(crs.course_discipline_desc) over (partition by s.schoolid, s.termid, s.teacher, s.expression order by s.no_of_students desc) as course_description
+                    , s.external_expression as period
+                    , first_value(crs.course_discipline) over (partition by s.schoolid, s.termid, s.teacher, s.expression order by s.no_of_students desc) as subject
+                    , t.abbreviation as term_name
+                    , t.firstday as term_start
+                    , t.lastday as term_end
+                    , count(s.id) over (partition by s.schoolid, s.termid, s.expression, ltch.users_dcid) as sec_cnt
+            	from sections s
+					inner join terms t on s.termid = t.id
+	                    and s.schoolid = t.schoolid
+                    inner join (select * from sch) sch on s.schoolid = sch.schoolid
+	                inner join (select * from curyear) cy on t.yearid = cy.yearid
+	                inner join (select * from crs) crs on crs.course_number = s.course_number
+	                inner join (select * from tch) ltch on s.teacher = ltch.schoolstaff_id
+	            where 1=1
+	            	and s.no_of_students > 0
             )
             , sec as (
             	select distinct
-            		s.schoolid
-            		, cast(s.id as varchar(40)) as sectionid
+            		sch.id as school_id
+            		, s.id as section_id
             		, nth_value(tch.users_dcid, 1) over (
                         partition by s.schoolid, s.termid, s.id, s.expression 
                         order by st.roleid, st.start_date 
@@ -438,46 +483,11 @@
             	from sections s
 					inner join terms t on s.termid = t.id
 	                    and s.schoolid = t.schoolid
-	                inner join (select * from curyear) cy on t.yearid = cy.yearid
+                    inner join (select * from sch) sch on s.schoolid = sch.schoolid
+                    inner join (select * from curyear) cy on t.yearid = cy.yearid
 	                inner join (select * from crs) crs on crs.course_number = s.course_number
 	                inner join sectionteacher st on s.id = st.sectionid
 	                inner join (select * from tch) tch on st.teacherid = tch.schoolstaff_id
-	            where 1=1
-	            	and s.no_of_students > 0
-            )
-            , per_sec as (
-            	-- sections compressed for a single period
-            	select distinct
-            		s.schoolid
-            		, 'per-' || first_value(s.id) over (partition by s.schoolid, s.termid, s.teacher, s.expression order by s.no_of_students desc) as sectionid
-                    , ltch.users_dcid as teacher_id
-                    , '' as teacher_2_id
-                    , '' as teacher_3_id
-                    , '' as teacher_4_id
-                    , '' as teacher_5_id
-                    , '' as teacher_6_id
-                    , '' as teacher_7_id
-                    , '' as teacher_8_id
-                    , '' as teacher_9_id
-                    , '' as teacher_10_id
-                    , t.abbreviation || ' : ' || s.external_expression || ' : ' || ltch.last_name  || ' : All Students ' as name
-            		, t.abbreviation || ' : ' || s.external_expression  as section_number
-                    , first_value(s.grade_level) over (partition by s.schoolid, s.termid, s.teacher, s.expression order by s.no_of_students desc) as grade
-                    , 'All Students' as course_name
-            		, first_value(s.course_number) over (partition by s.schoolid, s.termid, s.teacher, s.expression order by s.no_of_students desc) as course_number
-                    , first_value(crs.course_discipline_desc) over (partition by s.schoolid, s.termid, s.teacher, s.expression order by s.no_of_students desc) as course_description
-                    , s.external_expression as period
-                    , first_value(crs.course_discipline) over (partition by s.schoolid, s.termid, s.teacher, s.expression order by s.no_of_students desc) as subject
-                    , t.abbreviation as term_name
-                    , t.firstday as term_start
-                    , t.lastday as term_end
-                    , count(s.id) over (partition by s.schoolid, s.termid, s.expression, ltch.users_dcid) as sec_cnt
-            	from sections s
-					inner join terms t on s.termid = t.id
-	                    and s.schoolid = t.schoolid
-	                inner join (select * from curyear) cy on t.yearid = cy.yearid
-	                inner join (select * from crs) crs on crs.course_number = s.course_number
-	                inner join (select * from tch) ltch on s.teacher = ltch.schoolstaff_id
 	            where 1=1
 	            	and s.no_of_students > 0
             )
@@ -487,8 +497,8 @@
             	select * from per_sec
                 where sec_cnt > 1
             )  
-            select schoolid
-            	, sectionid
+            select school_id
+            	, section_id
             	, teacher_id
             	, teacher_2_id
             	, teacher_3_id
@@ -510,9 +520,14 @@
             	, term_name
             	, term_start
             	, term_end
+                , '' as blank_value_1
+                , '' as blank_value_2
+                , '' as blank_value_3
+                , '' as blank_value_4
+                , '' as blank_value_5
             from both
             where 1=1
-            order by schoolid, term_name, teacher_id, period
+            order by school_id, term_name, teacher_id, period
         ]]>
 	</sql>
 	</query>
