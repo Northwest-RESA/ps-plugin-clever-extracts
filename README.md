@@ -40,7 +40,7 @@ or Cmd+Shift+P then type Run Build Task
 
 ## 1.3.6
 
-- Fixed issue : #7 <https://github.com/Northwest-RESA/ps-plugin-clever-extracts/issues/7>
+- Fixed issue : <https://github.com/Northwest-RESA/ps-plugin-clever-extracts/issues/7>
 
 ## 1.3.5
 
