@@ -378,6 +378,8 @@
 
 		<column column="STUDENTS.ENROLL_STATUS">active</column>
 
+		<column column="STUDENTS.DCID">dcid</column>
+
 		<column column="ID" description="Blank field">blank_value_1</column>
         <column column="ID" description="Blank field">blank_value_2</column>
         <column column="ID" description="Blank field">blank_value_3</column>
@@ -606,6 +608,8 @@
                 , stu.student_number as student_number_as_id
                 , stu.active -- 1 = Enrolled or Pre-registered
                 
+				, stu.dcid
+
                 , '' as blank_value_1
                 , '' as blank_value_2
                 , '' as blank_value_3

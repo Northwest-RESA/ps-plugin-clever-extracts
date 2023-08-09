@@ -38,6 +38,10 @@ or Cmd+Shift+P then type Run Build Task
 
 # Version History
 
+## 1.3.7
+
+- Added DCID for student extracts so that connected tables are available for extract
+
 ## 1.3.6
 
 - Fixed issue : <https://github.com/Northwest-RESA/ps-plugin-clever-extracts/issues/7>
