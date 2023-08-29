@@ -38,6 +38,10 @@ or Cmd+Shift+P then type Run Build Task
 
 # Version History
 
+## 1.3.8
+
+- Added a different format for the Date of Birth for student
+
 ## 1.3.7
 
 - Added DCID for student extracts so that connected tables are available for extract

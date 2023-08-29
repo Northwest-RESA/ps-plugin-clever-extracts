@@ -399,6 +399,8 @@
 		<column column="STUDENTS.CITY">contact_schoolpickupflg</column>
 		<column column="STUDENTS.CITY">contact_receivesmailflg</column>
 
+		<column column="STUDENTS.DOB">dob_format1</column>
+
 		<column column="STUDENTS.TRANSACTION_DATE">date_last_modified</column>
 
 	</columns>
@@ -632,6 +634,8 @@
                 , scd.liveswithflg
                 , scd.schoolpickupflg
                 , scd.receivesmailflg
+
+                , to_char(stu.dob, 'YYYY-MM-DD') as dob_format1
                 
                 , greatest(
                     coalesce(stu.transaction_date, to_date('01/01/1900', 'MM/DD/YYYY'))
