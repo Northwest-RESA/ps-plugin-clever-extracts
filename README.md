@@ -38,6 +38,10 @@ or Cmd+Shift+P then type Run Build Task
 
 # Version History
 
+## 1.3.10
+
+- Reverting the change from 1.3.9
+
 ## 1.3.9
 
 - Defaulting the school_number for school_id in the schools export set up
