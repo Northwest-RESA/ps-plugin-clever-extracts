@@ -6,7 +6,7 @@
                 // columns can only be used once on the export
                 const table = "schools";
                 const colList = [
-                    {field:"school_id",label:"school_id"},
+                    {field:"school_number",label:"school_number"},
                     {field:"school_name",label:"school_name"},
                     {field:"preferered_school_number",label:"school_number"},
                     {field:"state_id",label:"state_id"},
