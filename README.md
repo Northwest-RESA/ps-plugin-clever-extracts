@@ -38,6 +38,10 @@ or Cmd+Shift+P then type Run Build Task
 
 # Version History
 
+## 1.3.11
+
+- Added missing course subject description for course numbers starting with 41.
+
 ## 1.3.10
 
 - Reverting the change from 1.3.9
