@@ -4,63 +4,66 @@
 		<![CDATA[
 			<script type="text/javascript">
                 // columns can only be used once on the export
-                const table = "students";
-				const colList = [
-					{field:"school_id", label:"school_id"}
-					, {field:"student_id", label:"student_id"}
-					, {field:"student_number", label:"student_number"}
-					, {field:"state_id", label:"state_id"}
-					, {field:"last_name", label:"last_name"}
-					, {field:"middle_name", label:"middle_name"}
-					, {field:"first_name", label:"first_name"}
-					, {field:"grade", label:"grade"}
-					, {field:"gender", label:"gender"}
-					, {field:"graduation_year", label:"graduation_year"}
-					, {field:"dob", label:"dob"}
-					, {field:"race", label:"race"}
-					, {field:"hispanic_latino", label:"hispanic_latino"}
-					, {field:"home_language", label:"home_language"}
-					, {field:"ell_status", label:"ell_status"}
-					, {field:"frl_status", label:"frl_status"}
-					, {field:"iep_status", label:"iep_status"}
-					, {field:"student_street", label:"student_street"}
-					, {field:"student_city", label:"student_city"}
-					, {field:"student_state", label:"student_state"}
-					, {field:"student_zip", label:"student_zip"}
-					, {field:"student_contact_email", label:"student_email"}
-					, {field:"contact_relationship", label:"contact_relationship"}
-					, {field:"contact_type", label:"contact_type"}
-					, {field:"contact_name", label:"contact_name"}
-					, {field:"contact_phone", label:"contact_phone"}
-					, {field:"contact_phone_type", label:"contact_phone_type"}
-					, {field:"contact_email", label:"contact_email"}
-					, {field:"contact_sis_id", label:"contact_sis_id"}
+                if (!nwdw_ps_colList) { var nwdw_ps_colList = []; }
+                nwdw_ps_colList = [
+					  {table:"students",field:"school_id", label:"school_id"}
+					, {table:"students",field:"student_id", label:"student_id"}
+					, {table:"students",field:"student_number", label:"student_number"}
+					, {table:"students",field:"state_id", label:"state_id"}
+					, {table:"students",field:"last_name", label:"last_name"}
+					, {table:"students",field:"middle_name", label:"middle_name"}
+					, {table:"students",field:"first_name", label:"first_name"}
+					, {table:"students",field:"grade", label:"grade"}
+					, {table:"students",field:"gender", label:"gender"}
+					, {table:"students",field:"graduation_year", label:"graduation_year"}
+					, {table:"students",field:"dob", label:"dob"}
+					, {table:"students",field:"race", label:"race"}
+					, {table:"students",field:"hispanic_latino", label:"hispanic_latino"}
+					, {table:"students",field:"home_language", label:"home_language"}
+					, {table:"students",field:"ell_status", label:"ell_status"}
+					, {table:"students",field:"frl_status", label:"frl_status"}
+					, {table:"students",field:"iep_status", label:"iep_status"}
+					, {table:"students",field:"student_street", label:"student_street"}
+					, {table:"students",field:"student_city", label:"student_city"}
+					, {table:"students",field:"student_state", label:"student_state"}
+					, {table:"students",field:"student_zip", label:"student_zip"}
+					, {table:"students",field:"student_contact_email", label:"student_email"}
+					, {table:"students",field:"contact_relationship", label:"contact_relationship"}
+					, {table:"students",field:"contact_type", label:"contact_type"}
+					, {table:"students",field:"contact_name", label:"contact_name"}
+					, {table:"students",field:"contact_phone", label:"contact_phone"}
+					, {table:"students",field:"contact_phone_type", label:"contact_phone_type"}
+					, {table:"students",field:"contact_email", label:"contact_email"}
+					, {table:"students",field:"contact_sis_id", label:"contact_sis_id"}
 
 				];
+                function getTableNames(){
+                    // Returns the unique table names from the Columns List array
+                    return nw_clever_colList
+                        .map((item) => item.table)
+                        .filter((value, index, self) => self.indexOf(value) === index);
+                }
                 function selectDefaultColumns() {
-                    
-                    // force all of the available fields to be displayed
-                    var btn_expall = document.querySelector("button[id=idExpandAll]");
-                    if (btn_expall) { 
-                        btn_expall.click();
-                    } else {
-                        var btn_expTbl = document.querySelector("button[id=" + table + "_expandBtn]")
-                        if (btn_expTbl) {
-                            if (window.getComputedStyle(btn_expTbl).display !== 'none') {
+                    // Ensures that the table in the selection list are expanded so the fields are accesible from the script
+                    getTableNames().forEach( tbl => {
+                        var btn_expTbl = document.querySelector("button[id=" + tbl + "_expandBtn]");
+                        if (btn_expTbl){
+                            if (window.getComputedStyle(btn_expTbl).display !== 'none'){
                                 btn_expTbl.click();
                             }
                         }
-                    }
-
-                    colList.forEach(col => {
-                        cb = document.querySelector("td[id=columnListContainer] [id^=cb_][id$=" + table + "_" + col.field + "]");
-                        // have to check to see if the item was already selected. If it was... we should skip it
+                    });
+                    nw_clevel_colList.forEach(col => {
+                        cb = document.querySelector("td[id=columnListContainer] [id=cb_" + col.table + "_" + col.field +"]");
+                        
                         if (cb) {
                             cb.click();
-                            if (cb.checked) {
+                            if (cb.checked){
                                 // look for the field in the selected columns and set the label.
-                                document.querySelector("td[id=columnSelectionContainer] input[type=text][id^=label_cb_][id$=" + table + "_" + col.field + "]").value = col.label;
+                                document.querySelector("td[id=columnSelectionContainer] input[type=text][id=label_cb_" + col.table + "_" + col.field + "]").value = col.label;
                             }
+                        }else{
+                            console.log(`ERROR: Field not found ${col.table}.${col.field}`);
                         }
                     });
                 }

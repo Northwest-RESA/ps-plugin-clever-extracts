@@ -4,36 +4,39 @@
 		<![CDATA[
 			<script type="text/javascript">
                 // columns can only be used once on the export
-                const table = "cc";
-				const colList = [
-					{field:"school_id", label:"school_id"}
-					, {field:"section_id", label:"section_id"}
-					, {field:"student_id", label:"student_id"}
+                if (!nwdw_ps_colList) { var nwdw_ps_colList = []; }
+                nwdw_ps_colList = [
+					  {table:"cc",field:"school_id", label:"school_id"}
+					, {table:"cc",field:"section_id", label:"section_id"}
+					, {table:"cc",field:"student_id", label:"student_id"}
 				];
+                function getTableNames(){
+                    // Returns the unique table names from the Columns List array
+                    return nw_clever_colList
+                        .map((item) => item.table)
+                        .filter((value, index, self) => self.indexOf(value) === index);
+                }
                 function selectDefaultColumns() {
-                    
-                    // force all of the available fields to be displayed
-                    var btn_expall = document.querySelector("button[id=idExpandAll]");
-                    if (btn_expall) { 
-                        btn_expall.click();
-                    } else {
-                        var btn_expTbl = document.querySelector("button[id=" + table + "_expandBtn]")
-                        if (btn_expTbl) {
-                            if (window.getComputedStyle(btn_expTbl).display !== 'none') {
+                    // Ensures that the table in the selection list are expanded so the fields are accesible from the script
+                    getTableNames().forEach( tbl => {
+                        var btn_expTbl = document.querySelector("button[id=" + tbl + "_expandBtn]");
+                        if (btn_expTbl){
+                            if (window.getComputedStyle(btn_expTbl).display !== 'none'){
                                 btn_expTbl.click();
                             }
                         }
-                    }
-
-                    colList.forEach(col => {
-                        cb = document.querySelector("td[id=columnListContainer] [id^=cb_][id$=" + table + "_" + col.field + "]");
-                        // have to check to see if the item was already selected. If it was... we should skip it
+                    });
+                    nw_clevel_colList.forEach(col => {
+                        cb = document.querySelector("td[id=columnListContainer] [id=cb_" + col.table + "_" + col.field +"]");
+                        
                         if (cb) {
                             cb.click();
-                            if (cb.checked) {
+                            if (cb.checked){
                                 // look for the field in the selected columns and set the label.
-                                document.querySelector("td[id=columnSelectionContainer] input[type=text][id^=label_cb_][id$=" + table + "_" + col.field + "]").value = col.label;
+                                document.querySelector("td[id=columnSelectionContainer] input[type=text][id=label_cb_" + col.table + "_" + col.field + "]").value = col.label;
                             }
+                        }else{
+                            console.log(`ERROR: Field not found ${col.table}.${col.field}`);
                         }
                     });
                 }

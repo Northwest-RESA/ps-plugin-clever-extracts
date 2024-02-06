@@ -4,55 +4,58 @@
         <![CDATA[
             <script type="text/javascript">
                 // columns can only be used once on the export
-                const table = "sections";
-                const colList = [
-                    {field:"school_id",label:"school_id"},
-                    {field:"section_id",label:"section_id"},
-                    {field:"teacher_id",label:"teacher_id"},
-                    {field:"teacher_2_id",label:"teacher_2_id"},
-                    {field:"teacher_3_id",label:"teacher_3_id"},
-                    {field:"teacher_4_id",label:"teacher_4_id"},
-                    {field:"teacher_5_id",label:"teacher_5_id"},
-                    {field:"teacher_6_id",label:"teacher_6_id"},
-                    {field:"teacher_7_id",label:"teacher_7_id"},
-                    {field:"teacher_8_id",label:"teacher_8_id"},
-                    {field:"teacher_9_id",label:"teacher_9_id"},
-                    {field:"teacher_10_id",label:"teacher_10_id"},
-                    {field:"section_name",label:"name"},
-                    {field:"section_number",label:"section_number"},
-                    {field:"course_name",label:"course_name"},
-                    {field:"course_number",label:"course_number"},
-                    {field:"course_description",label:"course_description"},
-                    {field:"external_expression",label:"period"},
-                    {field:"subject",label:"subject"},
-                    {field:"term_name",label:"term_name"},
-                    {field:"term_start",label:"term_start"},
-                    {field:"term_end",label:"term_end"}
+                if (!nw_clever_colList) {var nw_clever_colList = []; }
+                const nw_clever_colList = [
+                    {table:"sections",field:"school_id",label:"school_id"},
+                    {table:"sections",field:"section_id",label:"section_id"},
+                    {table:"sections",field:"teacher_id",label:"teacher_id"},
+                    {table:"sections",field:"teacher_2_id",label:"teacher_2_id"},
+                    {table:"sections",field:"teacher_3_id",label:"teacher_3_id"},
+                    {table:"sections",field:"teacher_4_id",label:"teacher_4_id"},
+                    {table:"sections",field:"teacher_5_id",label:"teacher_5_id"},
+                    {table:"sections",field:"teacher_6_id",label:"teacher_6_id"},
+                    {table:"sections",field:"teacher_7_id",label:"teacher_7_id"},
+                    {table:"sections",field:"teacher_8_id",label:"teacher_8_id"},
+                    {table:"sections",field:"teacher_9_id",label:"teacher_9_id"},
+                    {table:"sections",field:"teacher_10_id",label:"teacher_10_id"},
+                    {table:"sections",field:"section_name",label:"name"},
+                    {table:"sections",field:"section_number",label:"section_number"},
+                    {table:"sections",field:"course_name",label:"course_name"},
+                    {table:"sections",field:"course_number",label:"course_number"},
+                    {table:"sections",field:"course_description",label:"course_description"},
+                    {table:"sections",field:"external_expression",label:"period"},
+                    {table:"sections",field:"subject",label:"subject"},
+                    {table:"sections",field:"term_name",label:"term_name"},
+                    {table:"sections",field:"term_start",label:"term_start"},
+                    {table:"sections",field:"term_end",label:"term_end"}
                 ];
+                function getTableNames(){
+                    // Returns the unique table names from the Columns List array
+                    return nw_clever_colList
+                        .map((item) => item.table)
+                        .filter((value, index, self) => self.indexOf(value) === index);
+                }
                 function selectDefaultColumns() {
-                    
-                    // force all of the available fields to be displayed
-                    var btn_expall = document.querySelector("button[id=idExpandAll]");
-                    if (btn_expall) { 
-                        btn_expall.click();
-                    } else {
-                        var btn_expTbl = document.querySelector("button[id=" + table + "_expandBtn]")
-                        if (btn_expTbl) {
-                            if (window.getComputedStyle(btn_expTbl).display !== 'none') {
+                    // Ensures that the table in the selection list are expanded so the fields are accesible from the script
+                    getTableNames().forEach( tbl => {
+                        var btn_expTbl = document.querySelector("button[id=" + tbl + "_expandBtn]");
+                        if (btn_expTbl){
+                            if (window.getComputedStyle(btn_expTbl).display !== 'none'){
                                 btn_expTbl.click();
                             }
                         }
-                    }
-
-                    colList.forEach(col => {
-                        cb = document.querySelector("td[id=columnListContainer] [id^=cb_][id$=" + table + "_" + col.field + "]");
-                        // have to check to see if the item was already selected. If it was... we should skip it
+                    });
+                    nw_clevel_colList.forEach(col => {
+                        cb = document.querySelector("td[id=columnListContainer] [id=cb_" + col.table + "_" + col.field +"]");
+                        
                         if (cb) {
                             cb.click();
-                            if (cb.checked) {
+                            if (cb.checked){
                                 // look for the field in the selected columns and set the label.
-                                document.querySelector("td[id=columnSelectionContainer] input[type=text][id^=label_cb_][id$=" + table + "_" + col.field + "]").value = col.label;
+                                document.querySelector("td[id=columnSelectionContainer] input[type=text][id=label_cb_" + col.table + "_" + col.field + "]").value = col.label;
                             }
+                        }else{
+                            console.log(`ERROR: Field not found ${col.table}.${col.field}`);
                         }
                     });
                 }
