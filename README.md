@@ -38,6 +38,16 @@ or Cmd+Shift+P then type Run Build Task
 
 # Version History
 
+## 1.3.12
+
+- Resolved issues:
+  - <https://github.com/Northwest-RESA/ps-plugin-clever-extracts/issues/1> Schools: DIV Placement in Description causes Toggle to fail
+  - <https://github.com/Northwest-RESA/ps-plugin-clever-extracts/issues/2> Sections: DIV Placement in Description causes Toggle to fail
+  - <https://github.com/Northwest-RESA/ps-plugin-clever-extracts/issues/3> Sections Period Only: DIV Placement in Description causes Toggle to fail
+  - <https://github.com/Northwest-RESA/ps-plugin-clever-extracts/issues/4> Enrollments: DIV Placement in Description causes Toggle to fail
+  - <https://github.com/Northwest-RESA/ps-plugin-clever-extracts/issues/5> Enrollments Period Only: DIV Placement in Description causes Toggle to fail
+  - <https://github.com/Northwest-RESA/ps-plugin-clever-extracts/issues/6> JavaScript fails on partial reload
+
 ## 1.3.11
 
 - Added missing course subject description for course numbers starting with 41.

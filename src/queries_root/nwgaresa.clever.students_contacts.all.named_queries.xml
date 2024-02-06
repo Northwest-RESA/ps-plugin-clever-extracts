@@ -4,8 +4,8 @@
 		<![CDATA[
 			<script type="text/javascript">
                 // columns can only be used once on the export
-                if (!nwdw_ps_colList) { var nwdw_ps_colList = []; }
-                nwdw_ps_colList = [
+                if (!nw_clever_colList) { var nw_clever_colList = []; }
+                nw_clever_colList = [
 					  {table:"students",field:"school_id", label:"school_id"}
 					, {table:"students",field:"student_id", label:"student_id"}
 					, {table:"students",field:"student_number", label:"student_number"}
@@ -53,7 +53,7 @@
                             }
                         }
                     });
-                    nw_clevel_colList.forEach(col => {
+                    nw_clever_colList.forEach(col => {
                         cb = document.querySelector("td[id=columnListContainer] [id=cb_" + col.table + "_" + col.field +"]");
                         
                         if (cb) {
