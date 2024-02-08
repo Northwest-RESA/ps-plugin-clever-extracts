@@ -1,0 +1,123 @@
+name: Build and Release
+
+on:
+  # push:
+  #   branches:
+  #     - main
+  
+  workflow_dispatch:  # Triggered manually
+
+jobs:
+  checkout-and-install:
+    runs-on: ubuntu-latest
+
+    steps:
+      ## By default checks gets the source into the ${GITHUB_WORKSPACE} folder
+      ## ${GITHUB_WORKSPACE} is our current working directory in the action
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      ## Assuming that there is a src/plugin.xml file to retrieve the version attribute 
+      ## We are skipping future steps when the current plugin version is already tagged and released
+      - name: Version Validation
+        id: version_validation
+        run: |
+          sudo apt-get update && sudo apt-get install libxml2-utils
+          git fetch --tags
+          tags=$(git tag)
+          plugin_version=$(xmllint -xpath 'string(//*[local-name()="plugin"]/@version)' src/plugin.xml | cut -f1-3 -d.)
+          release_exists=false
+          for tag in $tags; do
+            if [ "$tag" = "v$plugin_version" ]; then
+              release_exists=true
+              break
+            fi
+          done
+          echo "release_exists=$release_exists" >> $GITHUB_OUTPUT
+      
+      ## These are dependencies for the build script or future steps 
+      - name: Install Dependencies
+        if: ${{ steps.version_validation.outputs.release_exists != 'true' }}
+        run: |
+          package_file=./.github/build-packages.txt
+          if [ -f "$package_file" ]; then
+            sudo apt-get update && sudo apt-get install -y $(cat "$package_file") || { echo "Error: Dependency installation failed"; exit 1; }
+          else
+            echo "Error: $package_file not found"
+            exit 1
+          fi
+        
+      - name: Create Plugin Package (Run Build Script)
+        if: ${{ steps.version_validation.outputs.release_exists != 'true' }}
+        id: run_build_script
+        run: ./scripts/build_zip.sh
+
+      - name: Check Version
+        if: ${{ steps.version_validation.outputs.release_exists != 'true' }}
+        id: check_version
+        run: |
+          last_build_file=./bin/lastbuild.txt
+          if [ -f "$last_build_file" ]; then
+              plugin_name=$(grep "plugin_name=" "$last_build_file" | awk -F '=' '{print $2}')
+              version=$(grep "version=" "$last_build_file" | awk -F '=' '{print $2}')
+              zip_file_name=$(grep "file_name=" "$last_build_file" | awk -F '=' '{print $2}')
+              zip_relative_path=$(grep "relative_path=" "$last_build_file" | awk -F '=' '{print $2}')
+              description=$(grep "description=" "$last_build_file" | awk -F '=' '{print $2}')
+
+              echo "plugin_name=$plugin_name" >> $GITHUB_OUTPUT
+              echo "version=$version" >> $GITHUB_OUTPUT
+              echo "zip_file_name=$zip_file_name" >> $GITHUB_OUTPUT
+              echo "zip_relative_path=$zip_relative_path" >> $GITHUB_OUTPUT
+              echo "description=$description" >> $GITHUB_OUTPUT
+          else
+              echo "lastbuild.txt file does not exist."
+              exit 1
+          fi
+
+      - name: Get Version Details
+        if: ${{ steps.version_validation.outputs.release_exists != 'true' }}
+        id: get_version_details
+        run: |
+          echo "# ${{ steps.check_version.outputs.plugin_name }}" > release_body.md
+          echo "## Version : ${{ steps.check_version.outputs.version }}" >> release_body.md
+          echo "${{ steps.check_version.outputs.description }}" >> release_body.md
+
+          ## Commenting this out. It might be helpful later.
+          # if find . -iname 'README.md' -maxdepth 1 -print -quit | grep -q .; then
+          #   # Extract content from README.md first ## -> first ###
+          #   content=$(awk '/^## /{f=1} f && /^### /{print; exit}' README.md)
+          #   echo "$content" >> release_body.md
+          # else
+          #   echo "A readme.md file could not be found. Creating blank content."
+          # fi
+          
+
+      ## Create Release will fail if the tag or release already exists
+      - name: Create Release
+        if: ${{ steps.version_validation.outputs.release_exists != 'true' }}
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
+        with:
+          tag_name: v${{ steps.check_version.outputs.version }}
+          # release_name: Version ${{ steps.check_version.outputs.version }}.${{ github.run_number }}
+          release_name: Version ${{ steps.check_version.outputs.version }}
+          body_path: release_body.md
+          draft: false
+          prerelease: false
+
+      - name: Upload Release Asset
+        if: ${{ steps.version_validation.outputs.release_exists != 'true' }}
+        id: upload_release_asset 
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }} 
+          # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. 
+          # See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
+          asset_path: ${{ steps.check_version.outputs.zip_relative_path }}
+          asset_name: ${{ steps.check_version.outputs.zip_file_name }}
+          asset_content_type: application/zip
+
