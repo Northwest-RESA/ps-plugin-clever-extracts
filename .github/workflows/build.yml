@@ -43,8 +43,7 @@ jobs:
           if [ -f "$package_file" ]; then
             sudo apt-get update && sudo apt-get install -y $(cat "$package_file") || { echo "Error: Dependency installation failed"; exit 1; }
           else
-            echo "Error: $package_file not found"
-            exit 1
+            echo "Warning: $package_file not found"
           fi
         
       - name: Create Plugin Package (Run Build Script)
