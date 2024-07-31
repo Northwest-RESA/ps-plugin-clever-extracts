@@ -1,0 +1,261 @@
+<queries>
+	<query name="nwgaresa.clever.staff.active" coreTable="USERS" flattened="true" tags="nwgaresa,clever,staff,active">
+	<description>
+        <![CDATA[
+            <script type="text/javascript">
+                // columns can only be used once on the export
+                if (!nw_clever_colList) { var nw_clever_colList = []; }
+                nw_clever_colList = [
+                    {table:"users",field:"school_id",label:"school_id"},
+                    {table:"users",field:"users_dcid",label:"staff_id"},
+                    {table:"users",field:"email_addr",label:"staff_email"},
+                    {table:"users",field:"last_name",label:"last_name"},
+                    {table:"users",field:"first_name",label:"first_name"},
+                    {table:"users",field:"title",label:"title"},
+                    {table:"users",field:"staff_description",label:"department"}
+                ];
+                 function getTableNames(){
+                    // Returns the unique table names from the Columns List array
+                    return nw_clever_colList
+                        .map((item) => item.table)
+                        .filter((value, index, self) => self.indexOf(value) === index);
+                }
+                function selectDefaultColumns() {
+                    // Ensures that the table in the selection list are expanded so the fields are accesible from the script
+                    getTableNames().forEach( tbl => {
+                        var btn_expTbl = document.querySelector("button[id=" + tbl + "_expandBtn]");
+                        if (btn_expTbl){
+                            if (window.getComputedStyle(btn_expTbl).display !== 'none'){
+                                btn_expTbl.click();
+                            }
+                        }
+                    });
+                    nw_clever_colList.forEach(col => {
+                        cb = document.querySelector("td[id=columnListContainer] [id=cb_" + col.table + "_" + col.field +"]");
+                        
+                        if (cb) {
+                            cb.click();
+                            if (cb.checked){
+                                // look for the field in the selected columns and set the label.
+                                document.querySelector("td[id=columnSelectionContainer] input[type=text][id=label_cb_" + col.table + "_" + col.field + "]").value = col.label;
+                            }
+                        }else{
+                            console.log(`ERROR: Field not found ${col.table}.${col.field}`);
+                        }
+                    });
+                }
+                function removeAllFields() {
+                    document.querySelectorAll("td[id=columnSelectionContainer] input[type=text][id^=label_cb_]").forEach(lbl => {
+                        document.querySelector("td[id=columnSelectionContainer] button[id=" + lbl.id.replace('label', 'delete') + "]").click();
+                    });
+                }
+            </script>
+            <h2 id="specHeader" class="toggle collapsed">Clever staff.csv Specification</h2>
+            <div class="hide">
+                <div class="rounded-box">
+                <ul>
+                    <li>Staff export data for Clever.</li>
+                    <li>Returns all staff records that do not have a section assignment with at least one student for the current school year.</li>
+                    <li>Optional fields can be left blank or excluded from the export.</li>
+                </ul>
+                </div>
+                <table align="center" border="0" cellpadding="4" cellspacing="0" class="grid">
+                    <thead>
+                        <tr>
+                            <th>Column Header *</th>
+                            <th>Required</th>
+                            <th>Format</th>
+                            <th>Notes</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="bold">school_id</td>
+                            <td class="bold">YES</td>
+                            <td>String</td>
+                            <td>Corresponds to &#39;school_id&#39; field in uploaded in the schools file.</td>
+                        </tr>
+                        <tr>
+                            <td class="bold">staff_id</td>
+                            <td class="bold">YES</td>
+                            <td>String</td>
+                            <td>Unique and constant id for the staff.</td>
+                        </tr>
+                        <tr>
+                            <td class="bold">staff_email</td>
+                            <td class="bold">YES</td>
+                            <td>Email</td>
+                            <td>Email address for the staff. Must be unique amongst the staff. Must match the format: <i>x@y.z</i></td>
+                        </tr>
+                        <tr>
+                            <td class="bold">first_name</td>
+                            <td class="bold">YES</td>
+                            <td>String</td>
+                            <td>First name of the staff.</td>
+                        </tr>
+                        <tr>
+                            <td class="bold">last_name</td>
+                            <td class="bold">YES</td>
+                            <td>String</td>
+                            <td>Last name of the staff.</td>
+                        </tr>
+                        <tr>
+                            <td>department</td>
+                            <td>NO</td>
+                            <td>String</td>
+                            <td>Department of the staff member.</td>
+                        </tr>
+                        <tr>
+                            <td>title</td>
+                            <td>NO</td>
+                            <td>String</td>
+                            <td>Staff&#39;s job title.</td>
+                        </tr>
+                        <tr>
+                            <td class="">username<sup>2</sup></td>
+                            <td class="">NO</td>
+                            <td>String</td>
+                            <td>Staff&#39;s default username if using Clever Passwords for Instant Login. Usernames will be available to connected applications.</td>
+                        </tr>
+                        <tr>
+                            <td class="">password<sup>3</sup></td>
+                            <td class="">NO</td>
+                            <td>String</td>
+                            <td>Staff&#39;s default password for Instant Login with Clever Passwords.</td>
+                        </tr>
+                        <tr>
+                            <td class="">role</td>
+                            <td class="">NO</td>
+                            <td>String</td>
+                            <td>Staff&#39;s user role in Clever. If this value is School Tech Lead, SchoolTechLead, or STL (case-insensitive) for any of their schools, the staff is set to a School Tech Lead at all of their schools. If left blank, or containing any other value across all schools, the staff will have Portal access only.</td>
+                        </tr>
+                        <tr>
+                            <td class="">ext.*</td>
+                            <td class="">NO</td>
+                            <td>String</td>
+                            <td>Any additional data you would like to send Clever for a Staff can be added as an extension field, e.g. ext.nickname or ext.program code. For more information, see https://support.clever.com/hc/enus/articles/360024370912</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            * Header rows must be labeled as listed in the table above. <b>Remove the table name and period from the label.</b> i.e. <i>SCHOOLS.</i>school_id
+            <div class="button-row">
+                <button type="button" onclick="selectDefaultColumns(); return false;">Toggle Default Columns</button>
+                <button type="button" onclick="removeAllFields(); return false;">Remove All Fields</button>
+            </div>
+        ]]>
+    </description>
+	<columns>
+        <column column="SCHOOLSTAFF.SCHOOLID" description="The SCHOOL_NUMBER reference from the schoolstaff table.">school_id</column>
+        <column column="DCID" description="The DCID field from the users table.">users_dcid</column>
+        <column column="LAST_NAME">last_name</column>
+        <column column="FIRST_NAME">first_name</column>
+        <column column="TITLE">title</column>
+        <column column="EMAIL_ADDR">email_addr</column>
+        <column column="TITLE">staff_description</column>
+
+        <column column="USERS.PSACCESS" description="USERS.PSACCESS Admin Portal Access Flag. 1 = Access Granted">admin_portal_access</column>
+        <column column="USERS.PTACCESS" description="USERS.PTACCESS Teacher Portal Access Flag. 1 = Access Granted">teacher_portal_access</column>
+        
+        <column column="SCHOOLSTAFF.STAFFSTATUS" description="Derived from SCHOOLSTAFF.STAFFSTATUS">staff_type</column>
+        
+        <column column="TEACHERNUMBER" description="Local assigned number for a teacher.">teachernumber</column>
+
+	</columns>
+	<sql>
+        <![CDATA[
+with curyear as (
+    select t.id
+        , t.yearid, t.lastday, t.firstday--, t.abbreviation, t.name
+    from terms t
+        join prefs 
+            on t.id between to_number(to_char(prefs.value) || '00') and to_number(to_char(prefs.value) || '99')
+            and lower(prefs.name) = 'coursearchiveyear'
+    where 1=1
+        and t.schoolid = 0 
+        and t.isyearrec = 1
+)
+, sch as (
+    select sch.id, sch.school_number as schoolid from schools sch where sch.school_number <> 999999
+)
+, sect as (
+    select distinct sec.schoolid, st.teacherid
+    from sections sec
+        inner join terms t on sec.termid = t.id
+            and sec.schoolid = t.schoolid
+        inner join (select * from curyear) cy on t.yearid = cy.yearid
+        inner join sectionteacher st on sec.id = st.sectionid
+    where 1=1
+        and sec.no_of_students > 0
+)
+, stf as (
+	select 
+		ss.id as schoolstaff_id
+        , ss.schoolid 
+        , ss.users_dcid 
+        , lower(usr.email_addr) as email_addr
+        , usr.first_name
+        , usr.last_name
+        , usr.title
+        
+        , case ss.status when 1 then 'active' else 'inactive' end as active -- 1 = Active  
+        , usr.psaccess as admin_portal_access -- 1 = Can access admin portal
+        , usr.ptaccess as teacher_portal_access -- 1 = Can access teacher portal
+        , ss.staffstatus  as staff_type -- 1 = Teacher Staff Type 
+        , case ss.staffstatus 
+        	when 0 then 'Not Assigned'
+        	when 1 then 'Teacher'
+        	when 2 then 'Staff'
+        	when 3 then 'Lunch Staff'
+        	when 4 then 'Substitute'
+        	else 'Unknown'
+        end as staff_description
+        , usr.teachernumber
+        , usr.lunch_id
+        , usr.loginid
+        , usr.teacherloginid
+        , usr.preferredname
+        , usr.lastfirst
+        , usr.homeschoolid as homeschool_schoolid -- = schools.school_number
+        , h_sch.id as homeschool_id -- = schools.id
+        , greatest(
+            coalesce(ss.transaction_date, to_date('01/01/1900', 'MM/DD/YYYY'))
+            , coalesce(usr.transaction_date, to_date('01/01/1900', 'MM/DD/YYYY'))
+        ) as date_last_modified
+    from schoolstaff ss
+        inner join users usr on ss.users_dcid = usr.dcid
+        inner join (select * from sch) sch on sch.schoolid = ss.schoolid
+        left join (select * from sch) h_sch on h_sch.schoolid = usr.homeschoolid 
+)
+, tch_sec as (
+    -- Teachers matched with a section that has at least one student enrolled
+    select 
+        tch.*
+        , row_number() over (partition by tch.teachernumber order by tch.teachernumber, case when tch.homeschool_schoolid = sect.schoolid then 0 else 1 end) seq
+    from (select * from stf) tch
+        inner join (select * from sect) sect on tch.schoolstaff_id = sect.teacherid
+    where 1=1
+)
+
+select 
+	stf.schoolid as school_id
+	, stf.users_dcid
+	, stf.last_name
+	, stf.first_name
+	, stf.title
+    , stf.email_addr
+	, stf.staff_description
+	, stf.admin_portal_access
+	, stf.teacher_portal_access
+	, stf.staff_type
+	, stf.teachernumber
+from (select * from stf)  stf 
+	left join (select * from tch_sec) tch_sec on tch_sec.seq = 1 and tch_sec.users_dcid = stf.users_dcid
+where 1=1
+	and tch_sec.users_dcid is null
+	and stf.active = 'active'
+        ]]>
+	</sql>
+	</query>
+
+</queries>
