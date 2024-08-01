@@ -191,7 +191,7 @@ with curyear as (
 , stf as (
 	select 
 		ss.id as schoolstaff_id
-        , ss.schoolid 
+        , sch.id as schoolid
         , ss.users_dcid 
         , lower(usr.email_addr) as email_addr
         , usr.first_name
@@ -238,7 +238,7 @@ with curyear as (
 )
 
 select 
-	stf.schoolid as school_id
+	stf.schoolid 
 	, stf.users_dcid
 	, stf.last_name
 	, stf.first_name

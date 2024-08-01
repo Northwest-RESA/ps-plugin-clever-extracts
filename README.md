@@ -38,6 +38,11 @@ or Cmd+Shift+P then type Run Build Task
 
 # Version History
 
+## 1.4.1
+
+- Resolved Issues:
+  - Staff School Id fixed to be the ID from the SCHOOLS table.
+
 ## 1.4.0
 
 Added a new PowerQuery to export staff members. The new PowerQuery returns all staff that are Active and do not have sections assigned to them.
