@@ -20,16 +20,18 @@
 
 ### NWEA Specific naming formats for extension fields
 
-    sis_id
-    ext.head_start
-    ext.section_504
-    ext.special_education
-    ext.talented_gifted
-    ext.title1
-    ext.frl
-    ext.ell
-    ext.iep
-    ext.other
+```text
+sis_id
+ext.head_start
+ext.section_504
+ext.special_education
+ext.talented_gifted
+ext.title1
+ext.frl
+ext.ell
+ext.iep
+ext.other
+```
 
 ## Installation
 
@@ -76,6 +78,15 @@ Within Data Export Manager, configure the extracts for each type of data you wan
 **NOTE:**
 If you use `NQ - nwgaresa.clever.sections.periodonly`, you should also use `NQ - nwgaresa.clever.enrollments.periodonly`. These should **not** be extracted if you are extracting `NQ - nwgaresa.clever.sections.all` or `NQ - nwgaresa.clever.enrollments.all`.
 
+## Stay in the Loop
+
+Want to know when I release new changes... Subscribe to the GitHub repository by following these instructions.
+
+- Go to the GitHub repository page.
+- Click on the [Watch] button at the top-right corner of the page.
+  - If you don't see the [Watch] button, you will need to create a GitHub account (free)
+- In the dropdown menu, select "Custom"
+- Check "Releases"
 
 ## How to Build the PowerSchool Plugin
 
@@ -99,8 +110,6 @@ chmod -R 771 ./scripts
 
 Shift+Command+B - Runs the Build Task.
 or Cmd+Shift+P then type Run Build Task
-
-
 
 # Version History
 
