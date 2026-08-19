@@ -1,10 +1,87 @@
 # ps-plugin-clever-extracts
 
- Generates a plugin zip file to allow districts to use these Power Queries to submit files to Clever via SFTP.
+ PowerSchool Plugin source files created to allow districts to use Power Queries to submit files to Clever via SFTP.
 
-## PowerSchool Plugin
+## Features
 
-The command below will generate the .zip file to be uploaded in PowerSchool. Execute the command in the project GitHub Folder. Note: command does not work in VS Code while in active Docker container.
+- Automatically selects the default fields for extract in the DEM
+  - Hit the [Toggle Default Columns] button and it selects the default fields and names them appropriately for the extracted data
+- Makes it possible to extract Custom Extension fields for each extract
+  - Mostly appropriate to the students extract
+- Extract students with or without 'Unlimited Contacts'
+- Adds a Section that compresses all sections for a period 
+  - Basically creates a 'period' section and puts all of the students that are in that period expression together
+  - Makes it easier for teachers to assign things in shared applications for an entire class
+  - It is optional - but SO COOL for the lead teacher
+- Extracts all students that are Enrolled, Pre-registered, or were ever enrolled during the current school year
+  - There is an Active field that be extracted to use in app sharing to prevent currently inactive students from being shared to specific Clever Apps
+  - Active : 1 = Enrolled or Pre-registered; 0 = Withdrawn
+- Extracts NWEA Map specific custom fields for students
+
+### NWEA Specific naming formats for extension fields
+
+    sis_id
+    ext.head_start
+    ext.section_504
+    ext.special_education
+    ext.talented_gifted
+    ext.title1
+    ext.frl
+    ext.ell
+    ext.iep
+    ext.other
+
+## Installation
+
+Download the latest plugin install [release](https://github.com/Northwest-RESA/ps-plugin-clever-extracts/releases). The file should be named something like `ps_plugin_clever_extracts_vx-x-x.zip`. 
+
+Install this in the same manner you would install any other PowerSchool Plugin and enable it. 
+
+### ... And Also 
+
+You should have your Clever Sync Type set to `SFTP`. When that is configured Clever will give you a Username and Password that you will need to configure in Remote Connections plugin within PowerSchool.
+
+### Data Export Manager
+
+Within Data Export Manager, configure the extracts for each type of data you want to sync with Clever. Each of the Power Queries are listed below. **Reminder**: Clever has linking fields defined for data files. Use the comments above the column/field selection in DEM to see more detail about each of these.
+
+#### Basic Extract Power Queries
+- `NQ - nwgaresa.clever.enrollments.all`
+  - Extracts all students that are currently enrolled or pre-registered in the current school year
+- `NQ - nwgaresa.clever.schools.all`
+  - Extracts schools (excluding Graduated School) that have a school year defined for the current school year.
+- `NQ - nwgaresa.clever.sections.all`
+  - Extracts scheduled sections with at least one enrolled student.
+  - If a lead teacher has more than one section defined in the same period, a new section will be generated that contains all of the students for all of the sections within that period.
+- `NQ - nwgaresa.clever.students.all`
+  - Extracts **all** students that were enrolled the current school year, no matter their current status.
+  - **Also returns Withdrawn students for the current year.**
+- `NQ - nwgaresa.clever.teachers.all`
+  - Extracts all teacher records that have a section assignment with at least one student for the current school year.
+- `NQ - nwgaresa.clever.staff.all`
+  - Extracts all staff records that **DO NOT** have a section assignment with at least one student for the current school year.
+
+#### Alternate Power Queries
+- `NQ - nwgaresa.clever.students_contacts.all`
+  - Extracts the same students as `NQ - nwgaresa.clever.students.all`
+  - Adds contacts linked to the student. `Unlimited Contacts`
+- `NQ - nwgaresa.clever.students_ext.nwea`
+  - Use this with `NQ - nwgaresa.clever.students.all` or `NQ - nwgaresa.clever.students_contacts.all`
+  - Adds NWEA Specific extension fields for students. See above.
+- `NQ - nwgaresa.clever.sections.periodonly`
+  - Extracts a generated section per scheduled period for each teacher that includes students from all sections defined for that teacher in a single period.
+- `NQ - nwgaresa.clever.enrollments.periodonly`
+  - Extracts the matching students for `NQ - nwgaresa.clever.sections.periodonly`.
+
+**NOTE:**
+If you use `NQ - nwgaresa.clever.sections.periodonly`, you should also use `NQ - nwgaresa.clever.enrollments.periodonly`. These should **not** be extracted if you are extracting `NQ - nwgaresa.clever.sections.all` or `NQ - nwgaresa.clever.enrollments.all`.
+
+
+## How to Build the PowerSchool Plugin
+
+I provide a release section for this repository. However, if you wanted to build it yourself the instructions are below. This project was created with Visual Studio Code on a Mac. You may have to adjust or change completely the build process to be successful. 
+
+The command below will generate the .zip file to be uploaded in PowerSchool. Execute the command in the project GitHub Folder. Note: command does not work in VS Code while in an active Docker container.
 
 ```bash
 cd src;
@@ -23,20 +100,13 @@ chmod -R 771 ./scripts
 Shift+Command+B - Runs the Build Task.
 or Cmd+Shift+P then type Run Build Task
 
-### NWEA Specific naming formats for extension fields
 
-    sis_id
-    ext.head_start
-    ext.section_504
-    ext.special_education
-    ext.talented_gifted
-    ext.title1
-    ext.frl
-    ext.ell
-    ext.iep
-    ext.other
 
 # Version History
+
+## 2.0.0
+
+- Removed the OAuth configuration from `plugin.xml`.
 
 ## 1.4.1
 
